@@ -21,6 +21,17 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Ensure MongoDB is connected for every request (especially on Vercel)
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error('Database connection failed:', err);
+    res.status(500).json({ error: 'Database connection failed', details: err.message });
+  }
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/hospital', hospitalRoutes);
