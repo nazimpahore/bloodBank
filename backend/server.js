@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectDB, closeDB } from './config/db.js';
-import { seedDatabase } from './seed/seedData.js';
 
 import authRoutes from './routes/authRoutes.js';
 import hospitalRoutes from './routes/hospitalRoutes.js';
@@ -50,7 +49,6 @@ app.get('/', (req, res) => {
 const startServer = async () => {
   try {
     await connectDB();
-    await seedDatabase();
 
     const server = app.listen(PORT, () => {
       console.log(`🚀 LifeDrop Backend Server running on http://localhost:${PORT}`);

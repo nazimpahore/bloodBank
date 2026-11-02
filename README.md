@@ -92,7 +92,7 @@ cd backend
 npm install
 npm start
 ```
-*The backend API server will start on **`http://localhost:5000`** and automatically seed the database with initial accounts and inventory.*
+*The backend API server will start on **`http://localhost:5000`** with a clean database ready for user registrations.*
 
 ### Step 2: Run the Frontend Application
 In a separate terminal window:
@@ -105,27 +105,12 @@ npm run dev
 
 ---
 
-## 🔐 Demo Credentials (Testing)
+## 👥 User & Hospital Registration
 
-You can log in immediately using the pre-seeded accounts:
+The application starts with a clean database ready for real accounts. You can create fresh accounts directly in the web UI:
 
-### 🏥 Hospital Accounts
-| Hospital Name | Location | Email | Password |
-| :--- | :--- | :--- | :--- |
-| **Liaquat National Hospital** | Karachi | `info@lnh.edu.pk` | `gandhi` |
-| **Civil Hospital (Dr. Ruth Pfau)** | Karachi | `contact@chk.gov.pk` | `arunodhaya` |
-| **LUMHS Civil Hospital** | Hyderabad | `helpdesk@lumhs.edu.pk` | `asia47` |
-| **Indus Hospital** | Badin | `badin.campus@tih.org.pk` | `apollo247` |
-| **GMMMC Teaching Hospital** | Sukkur | `info@gmmmc.edu.pk` | `amaravathi` |
-
-### 👤 Donor / User Accounts
-| Donor Name | Location | Blood Group | Email | Password |
-| :--- | :--- | :--- | :--- | :--- |
-| **Muhammad Ali Khan** | Karachi | `A+` | `m.ali.khan@gmail.com` | `test` |
-| **Tariq Mehmood Soomro** | Hyderabad | `B+` | `tariq.soomro@gmail.com` | `xyz@47` |
-| **Zubair Ahmed Memon** | Sukkur | `B+` | `zubair.memon78@gmail.com` | `rithish` |
-| **Bilal Hussain Shah** | Larkana | `B+` | `bilal.shah92@gmail.com` | `akshay74` |
-| **Ayesha Siddiqa** | Mirpurkhas | `AB-` | `ayesha.siddiqa44@gmail.com` | `nandhu989` |
+1. **Hospital / Clinic**: Click **Register** on the top navigation &rarr; select **Hospital / Clinic** tab &rarr; enter hospital name, city, official contact phone, email, and password.
+2. **Individual / Donor**: Click **Register** &rarr; select **User / Donor** tab &rarr; enter name, blood group, city, phone number, email, and password.
 
 ---
 
