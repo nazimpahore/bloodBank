@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { connectDB } from './config/db.js';
+import { connectDB, closeDB } from './config/db.js';
 import { seedDatabase } from './seed/seedData.js';
 
 import authRoutes from './routes/authRoutes.js';
@@ -52,9 +52,33 @@ const startServer = async () => {
     await connectDB();
     await seedDatabase();
 
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
       console.log(`🚀 LifeDrop Backend Server running on http://localhost:${PORT}`);
     });
+
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(`\n❌ Error: Port ${PORT} is already in use by another running process.`);
+        console.error(`👉 Stop the existing process running on port ${PORT}, or change PORT in backend/.env\n`);
+        process.exit(1);
+      } else {
+        console.error('Server error:', err);
+      }
+    });
+
+    // Graceful shutdown
+    const handleShutdown = async () => {
+      console.log('\n🛑 Shutting down server gracefully...');
+      server.close(async () => {
+        await closeDB();
+        console.log('✅ Server and database closed.');
+        process.exit(0);
+      });
+    };
+
+    process.on('SIGINT', handleShutdown);
+    process.on('SIGTERM', handleShutdown);
+
   } catch (error) {
     console.error('Failed to start server:', error.message);
     process.exit(1);
@@ -62,4 +86,3 @@ const startServer = async () => {
 };
 
 startServer();
-

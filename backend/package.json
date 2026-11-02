@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js",
+    "dev": "node --watch --watch-path=./models --watch-path=./routes --watch-path=./config --watch-path=./server.js server.js",
     "seed": "node seed/seedData.js"
   },
   "dependencies": {
@@ -21,4 +21,3 @@
     "mongodb-memory-server": "^10.1.2"
   }
 }
-
