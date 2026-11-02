@@ -372,6 +372,7 @@ export function BloodBankProvider({ children }) {
         patientRequests,
         donorRequests,
         notification,
+        setNotification,
         notify,
         addHospitalBlood,
         deleteHospitalBlood,
