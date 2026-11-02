@@ -1,28 +1,29 @@
-# 🩸 LifeDrop — Blood Bank Management System
+# 🩸 LifeDrop — Blood Bank Management System (MERN Stack)
 
-[![PHP Version](https://img.shields.io/badge/PHP-7.4%20|%208.x-777bb4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
-[![MySQL](https://img.shields.io/badge/MySQL-Database-4479a1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
-[![Bootstrap](https://img.shields.io/badge/Bootstrap-4.5.3-7952b3?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
-[![FontAwesome](https://img.shields.io/badge/Font%20Awesome-6.5.1-528dd7?style=for-the-badge&logo=font-awesome&logoColor=white)](https://fontawesome.com/)
+[![React](https://img.shields.io/badge/React-19.x-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-38bdf8?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Node.js](https://img.shields.io/badge/Node.js-24.x-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/Express.js-4.x-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47a248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![License](https://img.shields.io/badge/License-MIT-success?style=for-the-badge)](LICENSE)
 
-**LifeDrop** is a modern, responsive full-stack **Blood Bank Management System** developed in PHP and MySQL. It bridges the critical communication gap between certified hospitals, healthcare clinics, voluntary blood donors, and patients in urgent medical need.
+**LifeDrop** is a modern, responsive full-stack **Blood Bank Management System** built with **React**, **Tailwind CSS**, **Node.js**, **Express**, and **MongoDB**. It bridges the critical communication gap between certified hospitals, healthcare clinics, voluntary blood donors, and patients in urgent medical need.
 
 ---
 
 ## 🌟 Key Features
 
 ### 🏥 1. Hospital Administration Portal
-* **Inventory & Blood Stock Management**: Add, update, and delete available blood groups (`A+`, `A-`, `B+`, `B-`, `AB+`, `AB-`, `O+`, `O-`).
+* **Inventory & Blood Stock Management**: Add, view, and delete certified blood units (`A+`, `A-`, `B+`, `B-`, `AB+`, `AB-`, `O+`, `O-`) with storage compliance verification.
 * **Incoming Patient Requests**: Review urgent patient requests with one-click **Accept** or **Reject** actions.
-* **Community Donor Search**: Search and filter voluntary donors across cities in Sindh and request immediate emergency blood samples.
-* **Request Status Tracking**: Real-time status monitoring for all outbound donor inquiries (`Pending`, `Accepted`, `Declined`).
+* **Community Donor Search**: Search and filter voluntary donors across cities and send direct emergency donation inquiries.
+* **Request Status Tracking**: Real-time status monitoring for all outbound donor inquiries (`Pending`, `Accepted`, `Declined`) with cancellation options.
 * **Hospital Profile Settings**: Update hospital name, city, official contact phone number, and password credentials.
 
 ### 🩸 2. User & Voluntary Donor Portal
 * **Real-Time Blood Search**: Filter and search certified hospital blood stock by blood group and city.
 * **One-Click Blood Requests**: Submit blood unit requests directly to partner hospitals.
-* **Register as Voluntary Donor**: List your blood type so nearby hospitals can contact you during critical shortages.
+* **Register as Voluntary Donor**: List your blood type with WHO safety declaration so nearby hospitals can contact you during critical shortages.
 * **Donation Inquiry Management**: Accept or decline hospital requests requesting your registered blood group.
 * **Live Status Tracking**: Monitor response status (`Accepted`, `Pending Review`, `Rejected`) with cancellation options.
 * **Personal Profile Management**: Update phone number, city, blood group, and account security.
@@ -39,48 +40,68 @@
 
 | Layer | Technologies |
 | :--- | :--- |
-| **Frontend** | HTML5, CSS3, JavaScript (ES6+), Bootstrap 4.5.3, Font Awesome 6.5.1 |
+| **Frontend** | React, Tailwind CSS, JavaScript (ES6+), Lucide Icons, Font Awesome 6.5.1, Vite |
+| **Backend** | Node.js, Express.js, REST API |
+| **Database** | MongoDB with Mongoose ODM (Zero-config embedded fallback or MongoDB Atlas/local) |
 | **Typography** | Plus Jakarta Sans (Google Fonts) |
-| **Backend** | PHP 7.4 / 8.x |
-| **Database** | MySQL / MariaDB |
-| **Server Environment** | Apache (XAMPP / WAMP / LAMP) |
+
+---
+
+## 📂 Project Structure
+
+```plaintext
+bloodBank/
+├── frontend/                 # Modern React + Tailwind CSS client
+│   ├── public/               # Application assets, icons, and banners
+│   ├── src/
+│   │   ├── api/              # Centralized REST API client
+│   │   ├── components/       # Navbar, Footer, and Alert notifications
+│   │   ├── context/          # AuthContext & BloodBankContext state managers
+│   │   ├── pages/            # 18 converted page components
+│   │   ├── App.jsx           # Client routes & protected navigation
+│   │   ├── index.css         # Tailwind directives & design tokens
+│   │   └── main.jsx          # React DOM entry
+│   ├── package.json
+│   └── vite.config.js
+│
+├── backend/                  # Node.js + Express + MongoDB REST API
+│   ├── config/               # Database connection handler
+│   ├── models/               # Mongoose Schemas (Hospital, Receiver, BloodInfo, etc.)
+│   ├── routes/               # Express API endpoints (Auth, Hospital, Receiver, Public)
+│   ├── seed/                 # Pre-loaded database seeder mirroring original data
+│   ├── server.js             # Express application entry point
+│   ├── .env                  # Environment configuration
+│   └── package.json
+│
+├── .gitignore
+├── LICENSE
+└── README.md
+```
 
 ---
 
 ## 🚀 Getting Started & Installation
 
-Follow these steps to run the project locally on your machine:
-
 ### Prerequisites
-* [XAMPP](https://www.apachefriends.org/) (Apache + MySQL + PHP)
-* Git (Optional, for cloning)
+* [Node.js](https://nodejs.org/) (v18 or higher recommended)
+* npm (bundled with Node.js)
 
-### Step 1: Clone or Place the Repository
-Place the project folder into your XAMPP web root directory:
+### Step 1: Run the Backend Server
 ```bash
-# Using Git
-cd C:\xampp\htdocs
-git clone https://github.com/YOUR-USERNAME/bloodBank.git
+cd backend
+npm install
+npm start
 ```
-*(Or extract the ZIP directly into `C:\xampp\htdocs\bloodBank`)*
+*The backend API server will start on **`http://localhost:5000`** and automatically seed the database with initial accounts and inventory.*
 
-### Step 2: Start XAMPP Services
-1. Open the **XAMPP Control Panel**.
-2. Click **Start** for **Apache**.
-3. Click **Start** for **MySQL**.
-
-### Step 3: Import the Database
-1. Open your browser and go to **[http://localhost/phpmyadmin](http://localhost/phpmyadmin)**.
-2. Click on **New** in the left sidebar to create a database.
-3. Set the database name to: **`bloodbank`** and click **Create**.
-4. Select the newly created `bloodbank` database, then click the **Import** tab at the top.
-5. Click **Choose File**, select `sql/bloodbank.sql` from the project folder, and click **Import** (or **Go**).
-
-### Step 4: Access the Website
-Open your web browser and navigate to:
+### Step 2: Run the Frontend Application
+In a separate terminal window:
+```bash
+cd frontend
+npm install
+npm run dev
 ```
-http://localhost/bloodBank/main.php
-```
+*Open your browser and navigate to **`http://localhost:5173`**.*
 
 ---
 
@@ -105,59 +126,6 @@ You can log in immediately using the pre-seeded accounts:
 | **Zubair Ahmed Memon** | Sukkur | `B+` | `zubair.memon78@gmail.com` | `rithish` |
 | **Bilal Hussain Shah** | Larkana | `B+` | `bilal.shah92@gmail.com` | `akshay74` |
 | **Ayesha Siddiqa** | Mirpurkhas | `AB-` | `ayesha.siddiqa44@gmail.com` | `nandhu989` |
-
----
-
-## 📂 Project Structure
-
-```plaintext
-bloodBank/
-├── css/
-│   ├── style.css             # Main modern UI stylesheet & design system
-│   └── styles.css            # Helper media styling
-├── file/
-│   ├── connection.php        # MySQL database connection handler
-│   ├── hospitalLogin.php     # Hospital authentication logic
-│   ├── hospitalReg.php       # Hospital registration handler
-│   ├── receiverLogin.php     # Donor/User authentication logic
-│   ├── receiverReg.php       # Donor/User registration handler
-│   ├── infoAdd.php           # Add hospital blood stock
-│   ├── infoAddd.php          # Add voluntary donor sample
-│   ├── delete.php            # Delete hospital stock item
-│   ├── deleted.php           # Delete donor sample listing
-│   ├── request.php           # Patient request blood from hospital
-│   ├── requestd.php          # Hospital request sample from donor
-│   ├── accept.php / reject.php     # Hospital accept/reject patient requests
-│   ├── acceptd.php / rejectd.php   # Donor accept/reject hospital inquiries
-│   ├── cancel.php / canceld.php    # Request cancellation handlers
-│   └── updateprofile.php     # Profile update handler
-├── image/                    # Application icons, medical illustrations & banners
-├── sql/
-│   └── bloodbank.sql         # Database schema and seed data
-├── head.php                  # Shared HTML <head> with fonts, Bootstrap & CSS
-├── header.php                # Context-aware sticky navigation bar
-├── footer.php                # Modern 4-column footer component
-├── message.php               # System alert & notification component
-├── main.php                  # Public landing homepage
-├── index.php                 # Blood compatibility matrix & health tips
-├── about.php                 # Mission, values & platform background
-├── contact.php               # Lead coordinator contact & emergency helpline
-├── login.php                 # Unified tabbed login portal
-├── register.php              # Unified tabbed registration portal
-├── hospitalpage.html         # Hospital administrative dashboard
-├── Userpage.html             # Donor / User personal dashboard
-├── abs.php                   # Available hospital blood search
-├── deleteit.php              # Available community donor directory
-├── bloodinfo.php             # Hospital blood stock management
-├── blooddinfo.php            # Voluntary donor sample registration
-├── bloodrequest.php          # Incoming blood requests (Hospital view)
-├── sentrequest.php           # Outbound blood requests (User view)
-├── sentrequestd.php          # Outbound donor inquiries (Hospital view)
-├── blooddonate.php           # Inbound donation inquiries (User view)
-├── hprofile.php              # Hospital profile settings
-├── rprofile.php              # User profile settings
-└── logout.php                # Session termination
-```
 
 ---
 
