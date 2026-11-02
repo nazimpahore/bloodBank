@@ -98,9 +98,6 @@ export default function LoginPage() {
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100 transition text-sm"
                     required
                   />
-                  <small className="text-xs text-gray-400 mt-1 block">
-                    Demo: <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-700">info@lnh.edu.pk</code>
-                  </small>
                 </div>
 
                 <div>
@@ -115,9 +112,6 @@ export default function LoginPage() {
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100 transition text-sm"
                     required
                   />
-                  <small className="text-xs text-gray-400 mt-1 block">
-                    Demo: <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-700">gandhi</code>
-                  </small>
                 </div>
 
                 <button
@@ -141,9 +135,6 @@ export default function LoginPage() {
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100 transition text-sm"
                     required
                   />
-                  <small className="text-xs text-gray-400 mt-1 block">
-                    Demo: <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-700">m.ali.khan@gmail.com</code>
-                  </small>
                 </div>
 
                 <div>
@@ -158,9 +149,6 @@ export default function LoginPage() {
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100 transition text-sm"
                     required
                   />
-                  <small className="text-xs text-gray-400 mt-1 block">
-                    Demo: <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-700">test</code>
-                  </small>
                 </div>
 
                 <button
