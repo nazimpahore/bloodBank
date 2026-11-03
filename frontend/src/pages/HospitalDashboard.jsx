@@ -44,7 +44,8 @@ export default function HospitalDashboard() {
       {/* Dashboard Shortcut Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Blood Stock */}
-        <div className="portal-card">
+        <div className="portal-card group">
+          <div className="absolute inset-0 bg-gradient-to-b from-red-50/0 via-transparent to-red-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
           <div className="portal-icon">
             <i className="fa-solid fa-boxes-stacked"></i>
           </div>
@@ -52,13 +53,18 @@ export default function HospitalDashboard() {
           <p className="portal-desc">
             Add and manage blood groups currently available in your clinic or hospital bank.
           </p>
-          <Link to="/hospital/stock" className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-5 py-2 rounded-full text-xs font-semibold transition flex items-center gap-1.5">
-            Manage Stock <i className="fa-solid fa-arrow-right text-xs"></i>
+          <Link
+            to="/hospital/stock"
+            className="relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold text-red-600 bg-red-50/80 border border-red-200 group-hover:bg-gradient-to-r group-hover:from-red-500 group-hover:to-red-600 group-hover:text-white group-hover:border-transparent group-hover:shadow-md group-hover:shadow-red-500/25 transition-all duration-300"
+          >
+            <span>Manage Stock</span>
+            <i className="fa-solid fa-arrow-right text-[11px] transition-transform duration-300 group-hover:translate-x-1"></i>
           </Link>
         </div>
 
         {/* Blood Requests */}
-        <div className="portal-card">
+        <div className="portal-card group">
+          <div className="absolute inset-0 bg-gradient-to-b from-red-50/0 via-transparent to-red-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
           <div className="portal-icon">
             <i className="fa-solid fa-inbox"></i>
           </div>
@@ -66,13 +72,18 @@ export default function HospitalDashboard() {
           <p className="portal-desc">
             Review urgent requests submitted by patients and accept or reject matching donations.
           </p>
-          <Link to="/hospital/requests" className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-5 py-2 rounded-full text-xs font-semibold transition flex items-center gap-1.5">
-            View Requests <i className="fa-solid fa-arrow-right text-xs"></i>
+          <Link
+            to="/hospital/requests"
+            className="relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold text-red-600 bg-red-50/80 border border-red-200 group-hover:bg-gradient-to-r group-hover:from-red-500 group-hover:to-red-600 group-hover:text-white group-hover:border-transparent group-hover:shadow-md group-hover:shadow-red-500/25 transition-all duration-300"
+          >
+            <span>View Requests</span>
+            <i className="fa-solid fa-arrow-right text-[11px] transition-transform duration-300 group-hover:translate-x-1"></i>
           </Link>
         </div>
 
         {/* Available Donors */}
-        <div className="portal-card">
+        <div className="portal-card group">
+          <div className="absolute inset-0 bg-gradient-to-b from-red-50/0 via-transparent to-red-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
           <div className="portal-icon">
             <i className="fa-solid fa-hand-holding-medical"></i>
           </div>
@@ -80,13 +91,18 @@ export default function HospitalDashboard() {
           <p className="portal-desc">
             Search registered voluntary donors willing to donate samples for your hospital.
           </p>
-          <Link to="/hospital/donors" className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-5 py-2 rounded-full text-xs font-semibold transition flex items-center gap-1.5">
-            Browse Donors <i className="fa-solid fa-arrow-right text-xs"></i>
+          <Link
+            to="/hospital/donors"
+            className="relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold text-red-600 bg-red-50/80 border border-red-200 group-hover:bg-gradient-to-r group-hover:from-red-500 group-hover:to-red-600 group-hover:text-white group-hover:border-transparent group-hover:shadow-md group-hover:shadow-red-500/25 transition-all duration-300"
+          >
+            <span>Browse Donors</span>
+            <i className="fa-solid fa-arrow-right text-[11px] transition-transform duration-300 group-hover:translate-x-1"></i>
           </Link>
         </div>
 
         {/* Request Status */}
-        <div className="portal-card">
+        <div className="portal-card group">
+          <div className="absolute inset-0 bg-gradient-to-b from-red-50/0 via-transparent to-red-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
           <div className="portal-icon">
             <i className="fa-solid fa-clock-rotate-left"></i>
           </div>
@@ -94,13 +110,18 @@ export default function HospitalDashboard() {
           <p className="portal-desc">
             Track status of requests your hospital sent to registered community donors.
           </p>
-          <Link to="/hospital/request-status" className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-5 py-2 rounded-full text-xs font-semibold transition flex items-center gap-1.5">
-            Check Status <i className="fa-solid fa-arrow-right text-xs"></i>
+          <Link
+            to="/hospital/request-status"
+            className="relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold text-red-600 bg-red-50/80 border border-red-200 group-hover:bg-gradient-to-r group-hover:from-red-500 group-hover:to-red-600 group-hover:text-white group-hover:border-transparent group-hover:shadow-md group-hover:shadow-red-500/25 transition-all duration-300"
+          >
+            <span>Check Status</span>
+            <i className="fa-solid fa-arrow-right text-[11px] transition-transform duration-300 group-hover:translate-x-1"></i>
           </Link>
         </div>
 
         {/* Hospital Account */}
-        <div className="portal-card">
+        <div className="portal-card group">
+          <div className="absolute inset-0 bg-gradient-to-b from-red-50/0 via-transparent to-red-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
           <div className="portal-icon">
             <i className="fa-solid fa-id-card"></i>
           </div>
@@ -108,22 +129,31 @@ export default function HospitalDashboard() {
           <p className="portal-desc">
             Update hospital facility information, emergency contact number, and login credentials.
           </p>
-          <Link to="/hospital/profile" className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-5 py-2 rounded-full text-xs font-semibold transition flex items-center gap-1.5">
-            Edit Profile <i className="fa-solid fa-arrow-right text-xs"></i>
+          <Link
+            to="/hospital/profile"
+            className="relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold text-red-600 bg-red-50/80 border border-red-200 group-hover:bg-gradient-to-r group-hover:from-red-500 group-hover:to-red-600 group-hover:text-white group-hover:border-transparent group-hover:shadow-md group-hover:shadow-red-500/25 transition-all duration-300"
+          >
+            <span>Edit Profile</span>
+            <i className="fa-solid fa-arrow-right text-[11px] transition-transform duration-300 group-hover:translate-x-1"></i>
           </Link>
         </div>
 
         {/* Logout */}
-        <div className="portal-card">
-          <div className="portal-icon bg-gray-100 text-gray-700">
+        <div className="portal-card group">
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-100/0 via-transparent to-slate-100/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+          <div className="portal-icon !bg-slate-100 !text-slate-700 !border-slate-200 group-hover:!bg-slate-800 group-hover:!text-white group-hover:!border-slate-800 group-hover:!shadow-slate-500/20">
             <i className="fa-solid fa-power-off"></i>
           </div>
-          <h5 className="portal-title">Log Out</h5>
+          <h5 className="portal-title group-hover:!text-slate-800">Log Out</h5>
           <p className="portal-desc">
             Securely terminate your hospital session and return to the main homepage.
           </p>
-          <button onClick={handleLogout} className="border border-gray-400 text-gray-700 hover:bg-gray-800 hover:text-white px-5 py-2 rounded-full text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer">
-            Sign Out <i className="fa-solid fa-arrow-right text-xs"></i>
+          <button
+            onClick={handleLogout}
+            className="relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 group-hover:bg-slate-900 group-hover:text-white group-hover:border-slate-900 group-hover:shadow-md transition-all duration-300 cursor-pointer"
+          >
+            <span>Sign Out</span>
+            <i className="fa-solid fa-arrow-right text-[11px] transition-transform duration-300 group-hover:translate-x-1"></i>
           </button>
         </div>
       </div>

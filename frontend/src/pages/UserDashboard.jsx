@@ -44,7 +44,8 @@ export default function UserDashboard() {
       {/* Dashboard Shortcut Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Available Blood */}
-        <div className="portal-card">
+        <div className="portal-card group">
+          <div className="absolute inset-0 bg-gradient-to-b from-red-50/0 via-transparent to-red-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
           <div className="portal-icon">
             <i className="fa-solid fa-magnifying-glass"></i>
           </div>
@@ -52,13 +53,18 @@ export default function UserDashboard() {
           <p className="portal-desc">
             Explore live hospital blood inventories and request required blood units in one click.
           </p>
-          <Link to="/user/find-blood" className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-5 py-2 rounded-full text-xs font-semibold transition flex items-center gap-1.5">
-            Search Blood <i className="fa-solid fa-arrow-right text-xs"></i>
+          <Link
+            to="/user/find-blood"
+            className="relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold text-red-600 bg-red-50/80 border border-red-200 group-hover:bg-gradient-to-r group-hover:from-red-500 group-hover:to-red-600 group-hover:text-white group-hover:border-transparent group-hover:shadow-md group-hover:shadow-red-500/25 transition-all duration-300"
+          >
+            <span>Search Blood</span>
+            <i className="fa-solid fa-arrow-right text-[11px] transition-transform duration-300 group-hover:translate-x-1"></i>
           </Link>
         </div>
 
         {/* My Requests */}
-        <div className="portal-card">
+        <div className="portal-card group">
+          <div className="absolute inset-0 bg-gradient-to-b from-red-50/0 via-transparent to-red-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
           <div className="portal-icon">
             <i className="fa-solid fa-clipboard-list"></i>
           </div>
@@ -66,13 +72,18 @@ export default function UserDashboard() {
           <p className="portal-desc">
             Track blood requests sent to hospitals and check real-time acceptance status.
           </p>
-          <Link to="/user/my-requests" className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-5 py-2 rounded-full text-xs font-semibold transition flex items-center gap-1.5">
-            View Requests <i className="fa-solid fa-arrow-right text-xs"></i>
+          <Link
+            to="/user/my-requests"
+            className="relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold text-red-600 bg-red-50/80 border border-red-200 group-hover:bg-gradient-to-r group-hover:from-red-500 group-hover:to-red-600 group-hover:text-white group-hover:border-transparent group-hover:shadow-md group-hover:shadow-red-500/25 transition-all duration-300"
+          >
+            <span>View Requests</span>
+            <i className="fa-solid fa-arrow-right text-[11px] transition-transform duration-300 group-hover:translate-x-1"></i>
           </Link>
         </div>
 
         {/* Donate Blood */}
-        <div className="portal-card">
+        <div className="portal-card group">
+          <div className="absolute inset-0 bg-gradient-to-b from-red-50/0 via-transparent to-red-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
           <div className="portal-icon">
             <i className="fa-solid fa-hand-holding-heart"></i>
           </div>
@@ -80,13 +91,18 @@ export default function UserDashboard() {
           <p className="portal-desc">
             Register your blood type so nearby hospitals and patients can reach out when needed.
           </p>
-          <Link to="/user/donate" className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-5 py-2 rounded-full text-xs font-semibold transition flex items-center gap-1.5">
-            Offer Sample <i className="fa-solid fa-arrow-right text-xs"></i>
+          <Link
+            to="/user/donate"
+            className="relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold text-red-600 bg-red-50/80 border border-red-200 group-hover:bg-gradient-to-r group-hover:from-red-500 group-hover:to-red-600 group-hover:text-white group-hover:border-transparent group-hover:shadow-md group-hover:shadow-red-500/25 transition-all duration-300"
+          >
+            <span>Offer Sample</span>
+            <i className="fa-solid fa-arrow-right text-[11px] transition-transform duration-300 group-hover:translate-x-1"></i>
           </Link>
         </div>
 
         {/* Donation Status */}
-        <div className="portal-card">
+        <div className="portal-card group">
+          <div className="absolute inset-0 bg-gradient-to-b from-red-50/0 via-transparent to-red-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
           <div className="portal-icon">
             <i className="fa-solid fa-clock-rotate-left"></i>
           </div>
@@ -94,13 +110,18 @@ export default function UserDashboard() {
           <p className="portal-desc">
             Review incoming requests from certified hospitals requesting your blood group.
           </p>
-          <Link to="/user/donation-status" className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-5 py-2 rounded-full text-xs font-semibold transition flex items-center gap-1.5">
-            Check Status <i className="fa-solid fa-arrow-right text-xs"></i>
+          <Link
+            to="/user/donation-status"
+            className="relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold text-red-600 bg-red-50/80 border border-red-200 group-hover:bg-gradient-to-r group-hover:from-red-500 group-hover:to-red-600 group-hover:text-white group-hover:border-transparent group-hover:shadow-md group-hover:shadow-red-500/25 transition-all duration-300"
+          >
+            <span>Check Status</span>
+            <i className="fa-solid fa-arrow-right text-[11px] transition-transform duration-300 group-hover:translate-x-1"></i>
           </Link>
         </div>
 
         {/* User Account */}
-        <div className="portal-card">
+        <div className="portal-card group">
+          <div className="absolute inset-0 bg-gradient-to-b from-red-50/0 via-transparent to-red-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
           <div className="portal-icon">
             <i className="fa-solid fa-circle-user"></i>
           </div>
@@ -108,22 +129,31 @@ export default function UserDashboard() {
           <p className="portal-desc">
             Update your contact phone, city, registered blood group, or change account password.
           </p>
-          <Link to="/user/profile" className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-5 py-2 rounded-full text-xs font-semibold transition flex items-center gap-1.5">
-            Edit Profile <i className="fa-solid fa-arrow-right text-xs"></i>
+          <Link
+            to="/user/profile"
+            className="relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold text-red-600 bg-red-50/80 border border-red-200 group-hover:bg-gradient-to-r group-hover:from-red-500 group-hover:to-red-600 group-hover:text-white group-hover:border-transparent group-hover:shadow-md group-hover:shadow-red-500/25 transition-all duration-300"
+          >
+            <span>Edit Profile</span>
+            <i className="fa-solid fa-arrow-right text-[11px] transition-transform duration-300 group-hover:translate-x-1"></i>
           </Link>
         </div>
 
         {/* Logout */}
-        <div className="portal-card">
-          <div className="portal-icon bg-gray-100 text-gray-700">
+        <div className="portal-card group">
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-100/0 via-transparent to-slate-100/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+          <div className="portal-icon !bg-slate-100 !text-slate-700 !border-slate-200 group-hover:!bg-slate-800 group-hover:!text-white group-hover:!border-slate-800 group-hover:!shadow-slate-500/20">
             <i className="fa-solid fa-power-off"></i>
           </div>
-          <h5 className="portal-title">Log Out</h5>
+          <h5 className="portal-title group-hover:!text-slate-800">Log Out</h5>
           <p className="portal-desc">
             Securely sign out of your donor account and return to the public portal homepage.
           </p>
-          <button onClick={handleLogout} className="border border-gray-400 text-gray-700 hover:bg-gray-800 hover:text-white px-5 py-2 rounded-full text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer">
-            Sign Out <i className="fa-solid fa-arrow-right text-xs"></i>
+          <button
+            onClick={handleLogout}
+            className="relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 group-hover:bg-slate-900 group-hover:text-white group-hover:border-slate-900 group-hover:shadow-md transition-all duration-300 cursor-pointer"
+          >
+            <span>Sign Out</span>
+            <i className="fa-solid fa-arrow-right text-[11px] transition-transform duration-300 group-hover:translate-x-1"></i>
           </button>
         </div>
       </div>
