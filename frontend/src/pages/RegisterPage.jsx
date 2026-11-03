@@ -129,7 +129,7 @@ export default function RegisterPage() {
                       type="tel"
                       value={hphone}
                       onChange={(e) => setHphone(e.target.value)}
-                      placeholder="10-12 digits"
+                      placeholder="11 Digits"
                       className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100 transition text-sm"
                       required
                     />
@@ -233,7 +233,7 @@ export default function RegisterPage() {
                     type="tel"
                     value={rphone}
                     onChange={(e) => setRphone(e.target.value)}
-                    placeholder="10-12 digits"
+                    placeholder="11 Digits"
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100 transition text-sm"
                     required
                   />
