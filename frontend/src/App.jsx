@@ -14,6 +14,7 @@ import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 
 // Hospital pages
 import HospitalDashboard from './pages/HospitalDashboard';
@@ -64,6 +65,10 @@ export default function App() {
                 <Route path="/contact.php" element={<ContactPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/login.php" element={<LoginPage />} />
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/forgot-password.php" element={<ForgotPasswordPage />} />
+                <Route path="/reset-password" element={<ForgotPasswordPage />} />
+                <Route path="/reset-password.php" element={<ForgotPasswordPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/register.php" element={<RegisterPage />} />
 

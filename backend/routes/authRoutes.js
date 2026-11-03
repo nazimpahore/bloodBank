@@ -1,6 +1,7 @@
 import express from 'express';
 import Hospital from '../models/Hospital.js';
 import Receiver from '../models/Receiver.js';
+import PasswordReset from '../models/PasswordReset.js';
 
 const router = express.Router();
 
@@ -184,6 +185,214 @@ router.put('/receiver/profile', async (req, res) => {
         rphone: updated.rphone,
         role: 'receiver',
       },
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ==========================================
+// Forgot / Reset Password Endpoints
+// ==========================================
+
+// Request 6-digit OTP code for password reset
+router.post('/forgot-password/request', async (req, res) => {
+  try {
+    const { email, role } = req.body;
+    if (!email || !role) {
+      return res.status(400).json({ error: 'Email and account role are required.' });
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+    let accountName = '';
+    let phone = '';
+
+    if (role === 'hospital') {
+      const hospital = await Hospital.findOne({ hemail: cleanEmail });
+      if (!hospital) {
+        return res.status(404).json({ error: 'No hospital found registered with this email address.' });
+      }
+      accountName = hospital.hname;
+      phone = hospital.hphone;
+    } else if (role === 'receiver') {
+      const receiver = await Receiver.findOne({ remail: cleanEmail });
+      if (!receiver) {
+        return res.status(404).json({ error: 'No user account found registered with this email address.' });
+      }
+      accountName = receiver.rname;
+      phone = receiver.rphone;
+    } else {
+      return res.status(400).json({ error: 'Invalid account role specified.' });
+    }
+
+    // Generate secure 6-digit numeric OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // Valid for 15 minutes
+
+    await PasswordReset.findOneAndUpdate(
+      { email: cleanEmail, role },
+      { otp, expiresAt },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+
+    console.log(`[LifeDrop Password Reset] OTP for ${cleanEmail} (${role}): ${otp}`);
+
+    res.json({
+      message: `A verification code has been generated for ${accountName}.`,
+      email: cleanEmail,
+      role,
+      otp, // included for seamless verification / offline or demo testing
+      phoneHint: phone ? `***-***-${phone.slice(-4)}` : null,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Verify 6-digit OTP code
+router.post('/forgot-password/verify', async (req, res) => {
+  try {
+    const { email, role, otp } = req.body;
+    if (!email || !role || !otp) {
+      return res.status(400).json({ error: 'Email, account role, and verification code are required.' });
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanOtp = otp.toString().trim();
+
+    const record = await PasswordReset.findOne({
+      email: cleanEmail,
+      role,
+      otp: cleanOtp,
+    });
+
+    if (!record) {
+      return res.status(400).json({ error: 'Invalid verification code. Please check and try again.' });
+    }
+
+    if (new Date() > record.expiresAt) {
+      await PasswordReset.deleteOne({ _id: record._id });
+      return res.status(400).json({ error: 'Verification code has expired. Please request a new one.' });
+    }
+
+    res.json({
+      message: 'Verification code verified successfully. You may now enter your new password.',
+      verified: true,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Reset Password with OTP Code
+router.post('/forgot-password/reset', async (req, res) => {
+  try {
+    const { email, role, otp, newPassword, confirmPassword } = req.body;
+    if (!email || !role || !otp || !newPassword) {
+      return res.status(400).json({ error: 'All fields are required.' });
+    }
+
+    if (confirmPassword && newPassword !== confirmPassword) {
+      return res.status(400).json({ error: 'Passwords do not match.' });
+    }
+
+    if (newPassword.length < 4) {
+      return res.status(400).json({ error: 'Password must be at least 4 characters long.' });
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanOtp = otp.toString().trim();
+
+    const record = await PasswordReset.findOne({
+      email: cleanEmail,
+      role,
+      otp: cleanOtp,
+    });
+
+    if (!record) {
+      return res.status(400).json({ error: 'Invalid or expired verification code.' });
+    }
+
+    if (new Date() > record.expiresAt) {
+      await PasswordReset.deleteOne({ _id: record._id });
+      return res.status(400).json({ error: 'Verification code has expired. Please request a new one.' });
+    }
+
+    // Update password in database
+    if (role === 'hospital') {
+      const updated = await Hospital.findOneAndUpdate(
+        { hemail: cleanEmail },
+        { hpassword: newPassword },
+        { new: true }
+      );
+      if (!updated) return res.status(404).json({ error: 'Hospital not found.' });
+    } else if (role === 'receiver') {
+      const updated = await Receiver.findOneAndUpdate(
+        { remail: cleanEmail },
+        { rpassword: newPassword },
+        { new: true }
+      );
+      if (!updated) return res.status(404).json({ error: 'User account not found.' });
+    }
+
+    // Delete used OTP
+    await PasswordReset.deleteOne({ _id: record._id });
+
+    res.json({
+      message: 'Password has been reset successfully! You can now log in with your new password.',
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Reset Password with Registered Phone Verification (Fast fallback/alternate)
+router.post('/forgot-password/reset-with-phone', async (req, res) => {
+  try {
+    const { email, phone, role, newPassword, confirmPassword } = req.body;
+    if (!email || !phone || !role || !newPassword) {
+      return res.status(400).json({ error: 'Email, registered phone number, role, and new password are required.' });
+    }
+
+    if (confirmPassword && newPassword !== confirmPassword) {
+      return res.status(400).json({ error: 'Passwords do not match.' });
+    }
+
+    if (newPassword.length < 4) {
+      return res.status(400).json({ error: 'Password must be at least 4 characters long.' });
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanPhone = phone.trim().replace(/[-\s]/g, '');
+
+    if (role === 'hospital') {
+      const hospital = await Hospital.findOne({ hemail: cleanEmail });
+      if (!hospital) {
+        return res.status(404).json({ error: 'No hospital found registered with this email address.' });
+      }
+      const existingPhone = (hospital.hphone || '').trim().replace(/[-\s]/g, '');
+      if (existingPhone !== cleanPhone) {
+        return res.status(400).json({ error: 'Phone number does not match registered hospital records.' });
+      }
+      hospital.hpassword = newPassword;
+      await hospital.save();
+    } else if (role === 'receiver') {
+      const receiver = await Receiver.findOne({ remail: cleanEmail });
+      if (!receiver) {
+        return res.status(404).json({ error: 'No user account found registered with this email address.' });
+      }
+      const existingPhone = (receiver.rphone || '').trim().replace(/[-\s]/g, '');
+      if (existingPhone !== cleanPhone) {
+        return res.status(400).json({ error: 'Phone number does not match registered user records.' });
+      }
+      receiver.rpassword = newPassword;
+      await receiver.save();
+    } else {
+      return res.status(400).json({ error: 'Invalid account role specified.' });
+    }
+
+    res.json({
+      message: 'Password has been reset successfully! You can now log in with your new password.',
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

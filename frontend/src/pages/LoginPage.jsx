@@ -101,9 +101,17 @@ export default function LoginPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-600 uppercase mb-1.5">
-                    <i className="fa-solid fa-key text-red-600 mr-1"></i> Password
-                  </label>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="block text-xs font-bold text-gray-600 uppercase">
+                      <i className="fa-solid fa-key text-red-600 mr-1"></i> Password
+                    </label>
+                    <Link
+                      to="/forgot-password?role=hospital"
+                      className="text-xs font-semibold text-red-600 hover:text-red-700 hover:underline"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
                   <input
                     type="password"
                     value={hpassword}
@@ -138,9 +146,17 @@ export default function LoginPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-600 uppercase mb-1.5">
-                    <i className="fa-solid fa-key text-red-600 mr-1"></i> Password
-                  </label>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="block text-xs font-bold text-gray-600 uppercase">
+                      <i className="fa-solid fa-key text-red-600 mr-1"></i> Password
+                    </label>
+                    <Link
+                      to="/forgot-password?role=user"
+                      className="text-xs font-semibold text-red-600 hover:text-red-700 hover:underline"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
                   <input
                     type="password"
                     value={rpassword}

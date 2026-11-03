@@ -61,6 +61,30 @@ export const authAPI = {
       method: 'PUT',
       body: JSON.stringify(data),
     }),
+
+  requestPasswordReset: ({ email, role }) =>
+    request('/auth/forgot-password/request', {
+      method: 'POST',
+      body: JSON.stringify({ email, role }),
+    }),
+
+  verifyResetCode: ({ email, role, otp }) =>
+    request('/auth/forgot-password/verify', {
+      method: 'POST',
+      body: JSON.stringify({ email, role, otp }),
+    }),
+
+  resetPassword: ({ email, role, otp, newPassword, confirmPassword }) =>
+    request('/auth/forgot-password/reset', {
+      method: 'POST',
+      body: JSON.stringify({ email, role, otp, newPassword, confirmPassword }),
+    }),
+
+  resetPasswordWithPhone: ({ email, phone, role, newPassword, confirmPassword }) =>
+    request('/auth/forgot-password/reset-with-phone', {
+      method: 'POST',
+      body: JSON.stringify({ email, phone, role, newPassword, confirmPassword }),
+    }),
 };
 
 export const hospitalAPI = {
