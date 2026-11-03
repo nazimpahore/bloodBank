@@ -6,27 +6,35 @@ export default function AlertMessage() {
   const { notification, setNotification } = useBloodBank();
   const { authError, authSuccess, clearMessages } = useAuth();
   const [isVisible, setIsVisible] = useState(false);
+  const [currentMessage, setCurrentMessage] = useState(null);
 
-  const msg = notification || (authError ? { type: 'danger', message: authError } : authSuccess ? { type: 'success', message: authSuccess } : null);
+  const msg =
+    notification ||
+    (authError
+      ? { type: 'danger', message: authError }
+      : authSuccess
+      ? { type: 'success', message: authSuccess }
+      : null);
 
   const cleanState = () => {
     clearMessages();
     if (setNotification) setNotification(null);
+    setCurrentMessage(null);
   };
 
   useEffect(() => {
-    if (msg) {
+    if (msg?.message) {
+      setCurrentMessage(msg);
       setIsVisible(true);
 
-      // Start smooth fade out after 1 second
+      // Auto dismiss after 500ms
       const fadeTimer = setTimeout(() => {
         setIsVisible(false);
-      }, 1000);
+      }, 500);
 
-      // Clean context state after smooth animation completes
       const removeTimer = setTimeout(() => {
         cleanState();
-      }, 1500);
+      }, 750);
 
       return () => {
         clearTimeout(fadeTimer);
@@ -41,40 +49,42 @@ export default function AlertMessage() {
     setIsVisible(false);
     setTimeout(() => {
       cleanState();
-    }, 300);
+    }, 200);
   };
 
-  if (!msg && !isVisible) return null;
+  if (!currentMessage && !isVisible) return null;
 
-  const isSuccess = msg?.type === 'success';
+  const isSuccess = currentMessage?.type === 'success';
 
   return (
     <div
-      className={`rounded-xl border shadow-sm transition-all duration-500 ease-out overflow-hidden ${
+      className={`fixed top-5 right-5 sm:top-6 sm:right-6 z-[99999] pointer-events-auto transition-all duration-250 ease-out ${
         isVisible
-          ? 'opacity-100 translate-y-0 max-h-32 mb-6 p-4'
-          : 'opacity-0 -translate-y-2 max-h-0 mb-0 py-0 px-4 border-transparent pointer-events-none'
-      } ${
-        isSuccess
-          ? 'bg-[#ecfdf5] border-[#a7f3d0] text-[#065f46]'
-          : 'bg-[#fef2f2] border-[#fecaca] text-[#991b1b]'
+          ? 'opacity-100 translate-y-0 scale-100'
+          : 'opacity-0 -translate-y-2 scale-95 pointer-events-none'
       }`}
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <i
-            className={`fa-solid ${
-              isSuccess ? 'fa-circle-check text-emerald-600' : 'fa-circle-exclamation text-red-600'
-            } text-lg`}
-          ></i>
-          <span className="font-semibold text-sm">{msg?.message}</span>
-        </div>
+      <div
+        className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border shadow-lg text-sm font-medium ${
+          isSuccess
+            ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
+            : 'bg-red-50 border-red-200 text-red-900'
+        }`}
+      >
+        <i
+          className={`fa-solid ${
+            isSuccess ? 'fa-circle-check text-emerald-600' : 'fa-circle-exclamation text-red-600'
+          } text-base flex-shrink-0`}
+        ></i>
+
+        <span className="leading-snug pr-1">{currentMessage?.message}</span>
+
         <button
           onClick={handleManualDismiss}
-          className="text-gray-400 hover:text-gray-600 transition text-sm cursor-pointer ml-4"
+          className="text-gray-400 hover:text-gray-600 p-0.5 ml-1 transition cursor-pointer flex-shrink-0"
           title="Dismiss"
         >
-          <i className="fa-solid fa-xmark"></i>
+          <i className="fa-solid fa-xmark text-xs"></i>
         </button>
       </div>
     </div>

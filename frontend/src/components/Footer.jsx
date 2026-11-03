@@ -2,12 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
-  const bloodGroups = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'];
-
   return (
     <footer className="mt-auto bg-[#0f172a] text-white pt-12 pb-6 border-t border-[#334155]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
           
           {/* Brand & Mission */}
           <div>
@@ -68,22 +66,6 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
-          </div>
-
-          {/* Blood Groups */}
-          <div>
-            <h6 className="uppercase font-bold text-sm tracking-wider mb-4 text-[#f1f5f9]">Blood Groups</h6>
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              {bloodGroups.map(bg => (
-                <Link
-                  key={bg}
-                  to={`/user/find-blood?bg=${encodeURIComponent(bg)}`}
-                  className="text-[#94a3b8] hover:text-white flex items-center gap-1.5 transition py-0.5"
-                >
-                  <i className="fa-solid fa-droplet text-xs text-red-500"></i> {bg}
-                </Link>
-              ))}
-            </div>
           </div>
 
           {/* Emergency Contact */}

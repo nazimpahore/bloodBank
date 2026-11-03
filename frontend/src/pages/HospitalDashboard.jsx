@@ -140,17 +140,17 @@ export default function HospitalDashboard() {
 
         {/* Logout */}
         <div className="portal-card group">
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-100/0 via-transparent to-slate-100/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-          <div className="portal-icon !bg-slate-100 !text-slate-700 !border-slate-200 group-hover:!bg-slate-800 group-hover:!text-white group-hover:!border-slate-800 group-hover:!shadow-slate-500/20">
+          <div className="absolute inset-0 bg-gradient-to-b from-red-50/0 via-transparent to-red-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+          <div className="portal-icon">
             <i className="fa-solid fa-power-off"></i>
           </div>
-          <h5 className="portal-title group-hover:!text-slate-800">Log Out</h5>
+          <h5 className="portal-title">Log Out</h5>
           <p className="portal-desc">
             Securely terminate your hospital session and return to the main homepage.
           </p>
           <button
             onClick={handleLogout}
-            className="relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 group-hover:bg-slate-900 group-hover:text-white group-hover:border-slate-900 group-hover:shadow-md transition-all duration-300 cursor-pointer"
+            className="relative z-10 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-bold text-red-600 bg-red-50/80 border border-red-200 group-hover:bg-gradient-to-r group-hover:from-red-500 group-hover:to-red-600 group-hover:text-white group-hover:border-transparent group-hover:shadow-md group-hover:shadow-red-500/25 transition-all duration-300 cursor-pointer"
           >
             <span>Sign Out</span>
             <i className="fa-solid fa-arrow-right text-[11px] transition-transform duration-300 group-hover:translate-x-1"></i>

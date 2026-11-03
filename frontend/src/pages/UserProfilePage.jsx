@@ -24,7 +24,7 @@ export default function UserProfilePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-4">
           <div>
             <h3 className="text-2xl font-bold text-gray-900 mb-1 flex items-center gap-2">
-              <i className="fa-solid fa-circle-user text-red-600"></i> Donor Profile Settings
+              <i className="fa-solid fa-circle-user text-red-600"></i> Your Profile Settings
             </h3>
             <p className="text-gray-500 text-xs sm:text-sm mb-0">
               Manage personal contact details and registered blood type
@@ -48,7 +48,7 @@ export default function UserProfilePage() {
               <div className="brand-icon-wrapper w-14 h-14 text-2xl mx-auto mb-3 bg-red-100 text-red-600">
                 <i className="fa-solid fa-circle-user"></i>
               </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-1">Edit Lifesaver Profile</h4>
+              <h4 className="text-xl font-bold text-gray-900 mb-1">Edit Your Profile</h4>
               <p className="text-gray-500 text-xs">Ensure your phone and city are valid so hospitals can locate you</p>
             </div>
 

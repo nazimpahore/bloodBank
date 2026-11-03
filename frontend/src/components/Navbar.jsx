@@ -28,20 +28,14 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-18">
           
           {/* Brand */}
-          <Link to="/" className="flex items-center gap-2 no-underline">
+          <div className="flex items-center gap-2 select-none cursor-default">
             <span className="brand-icon-wrapper">
               <i className="fa-solid fa-heart-pulse text-[#dc2626]"></i>
             </span>
             <span className="brand-text">
               Life<span className="text-[#dc2626]">Drop</span>
             </span>
-            {currentUser?.role === 'hospital' && (
-              <span className="badge-portal ml-2">Hospital</span>
-            )}
-            {currentUser?.role === 'receiver' && (
-              <span className="badge-portal ml-2">Donor</span>
-            )}
-          </Link>
+          </div>
 
           {/* Mobile menu button */}
           <div className="flex lg:hidden">
