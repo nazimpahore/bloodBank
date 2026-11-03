@@ -38,7 +38,7 @@ export default function AboutPage() {
                 EVERY LIFE COUNTS
               </span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-4">
-                "I'm here to save you!"
+                "We are here to save you!"
               </h2>
               <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-4">
                 We believe every life matters. Time is the most precious resource during critical medical procedures and emergency transfusions. Our core goal is to make compatible blood available with zero delays, connecting voluntary donors directly with certified medical facilities.
