@@ -5,6 +5,7 @@ import { BloodBankProvider } from './context/BloodBankContext';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
 
 // Public pages
 import HomePage from './pages/HomePage';
@@ -46,6 +47,7 @@ export default function App() {
     <AuthProvider>
       <BloodBankProvider>
         <BrowserRouter>
+          <ScrollToTop />
           <div className="flex flex-col min-h-screen">
             <Navbar />
             <main className="flex-1">
