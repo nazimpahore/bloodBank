@@ -1,63 +1,128 @@
 import React from 'react';
 import AlertMessage from '../components/AlertMessage';
 
+/* ── Inline SVG blood-drop icon ── */
+function BloodDrop({ label, className = '' }) {
+  return (
+    <div className={`blood-drop-icon ${className}`}>
+      <svg viewBox="0 0 60 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M30 4 C30 4 4 34 4 50 C4 63.8 15.6 74 30 74 C44.4 74 56 63.8 56 50 C56 34 30 4 30 4Z"
+          fill="url(#dropGrad)"
+        />
+        <defs>
+          <linearGradient id="dropGrad" x1="30" y1="4" x2="30" y2="74" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#f87171" />
+            <stop offset="100%" stopColor="#b91c1c" />
+          </linearGradient>
+        </defs>
+        <text x="50%" y="62%" dominantBaseline="middle" textAnchor="middle"
+          fill="white" fontSize="20" fontWeight="800" fontFamily="'Plus Jakarta Sans', sans-serif">
+          {label}
+        </text>
+      </svg>
+    </div>
+  );
+}
+
+/* ── ECG / heartbeat SVG decoration ── */
+function EcgLine() {
+  return (
+    <svg className="ecg-line" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polyline
+        points="0,20 20,20 28,5 34,35 40,5 46,20 60,20 68,18 72,20 120,20"
+        stroke="#dc2626" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none"
+      />
+      <circle cx="112" cy="20" r="6" fill="#dc2626" opacity="0.15" />
+      <circle cx="112" cy="20" r="4" fill="#dc2626" />
+    </svg>
+  );
+}
+
+/* ── Red wave / ribbon decoration at card bottom ── */
+function CardWave() {
+  return (
+    <svg className="card-wave" viewBox="0 0 320 28" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 16 Q40 0 80 14 Q120 28 160 14 Q200 0 240 14 Q280 28 320 16 L320 28 L0 28 Z" fill="#dc2626" />
+    </svg>
+  );
+}
+
+/* ── Green donor section icon ── */
+function GiveIcon() {
+  return (
+    <div className="compat-section-icon give-icon">
+      <i className="fa-solid fa-people-group" />
+    </div>
+  );
+}
+
+/* ── Blue receive section icon ── */
+function ReceiveIcon() {
+  return (
+    <div className="compat-section-icon receive-icon">
+      <i className="fa-solid fa-circle-arrow-down" />
+    </div>
+  );
+}
+
 export default function BloodGuidePage() {
   const bloodCards = [
     {
       group: 'A+',
       name: 'Type A Positive',
+      desc: 'A+ is a common blood type.',
       give: ['A+', 'AB+'],
       receive: ['A+', 'A-', 'O+', 'O-'],
-      badgeBg: 'bg-gradient-to-br from-red-500 to-red-600',
     },
     {
       group: 'A-',
       name: 'Type A Negative',
+      desc: 'A- can donate to all A and AB types.',
       give: ['A-', 'A+', 'AB-', 'AB+'],
       receive: ['A-', 'O-'],
-      badgeBg: 'bg-gradient-to-br from-rose-500 to-rose-600',
     },
     {
       group: 'B+',
       name: 'Type B Positive',
+      desc: 'B+ is found in about 9% of people.',
       give: ['B+', 'AB+'],
       receive: ['B+', 'B-', 'O+', 'O-'],
-      badgeBg: 'bg-gradient-to-br from-red-500 to-red-600',
     },
     {
       group: 'B-',
       name: 'Type B Negative',
+      desc: 'B- is a rare and valuable blood type.',
       give: ['B-', 'B+', 'AB-', 'AB+'],
       receive: ['B-', 'O-'],
-      badgeBg: 'bg-gradient-to-br from-rose-500 to-rose-600',
     },
     {
       group: 'AB+',
       name: 'Type AB Positive',
+      desc: 'AB+ is the universal recipient type.',
       give: ['AB+ only'],
-      receive: ['All Blood Groups (Universal)'],
-      badgeBg: 'bg-gradient-to-br from-sky-500 to-sky-700',
+      receive: ['All Blood Groups'],
     },
     {
       group: 'AB-',
       name: 'Type AB Negative',
+      desc: 'AB- is one of the rarest blood types.',
       give: ['AB-', 'AB+'],
       receive: ['AB-', 'A-', 'B-', 'O-'],
-      badgeBg: 'bg-gradient-to-br from-sky-500 to-sky-700',
     },
     {
       group: 'O+',
       name: 'Type O Positive',
+      desc: 'O+ is the most common blood type.',
       give: ['O+', 'A+', 'B+', 'AB+'],
       receive: ['O+', 'O-'],
-      badgeBg: 'bg-gradient-to-br from-red-500 to-red-600',
     },
     {
       group: 'O-',
       name: 'Type O Negative',
-      give: ['All Blood Groups (Universal)'],
+      desc: 'O- is the universal red cell donor.',
+      give: ['All Blood Groups'],
       receive: ['O- only'],
-      badgeBg: 'bg-gradient-to-br from-emerald-500 to-emerald-600',
     },
   ];
 
@@ -106,37 +171,70 @@ export default function BloodGuidePage() {
         {/* Blood Type Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           {bloodCards.map(card => (
-            <div key={card.group} className="blood-group-card p-6">
-              <div className={`blood-badge ${card.badgeBg}`}>
-                {card.group}
-              </div>
-              <h5 className="text-center font-bold text-lg text-gray-900 mb-4">{card.name}</h5>
+            <div key={card.group} className="bg-card">
 
-              <div className="mb-4">
-                <small className="text-gray-500 font-bold block text-xs uppercase mb-1.5">
-                  <i className="fa-solid fa-hand-holding-heart text-emerald-600 mr-1"></i> CAN GIVE TO:
-                </small>
-                <div className="flex flex-wrap gap-1">
-                  {card.give.map((g, i) => (
-                    <span key={i} className="compat-tag compat-give">
-                      {g}
-                    </span>
-                  ))}
+              {/* ── Card Header ── */}
+              <div className="bg-card-header">
+                {/* Pink circle blob — top right decoration */}
+                <div className="bg-card-blob" />
+
+                {/* Blood drop + title */}
+                <div className="bg-card-title-row">
+                  <BloodDrop label={card.group} />
+                  <div className="bg-card-title-divider" />
+                  <div className="bg-card-title-text">
+                    <h5 className="bg-card-name">
+                      {card.name.split(' ').slice(0, 1).join(' ')}{' '}
+                      <span className="bg-card-name-accent">
+                        {card.name.split(' ').slice(1).join(' ')}
+                      </span>
+                    </h5>
+                    <p className="bg-card-desc">{card.desc}</p>
+                  </div>
+                </div>
+
+                {/* ECG decoration */}
+                <EcgLine />
+              </div>
+
+              {/* ── Card Body ── */}
+              <div className="bg-card-body">
+
+                {/* Can Give To */}
+                <div className="bg-compat-section bg-give-section">
+                  <div className="bg-compat-header">
+                    <GiveIcon />
+                    <div>
+                      <p className="bg-compat-label">Can Give To:</p>
+                      <p className="bg-compat-sub">You can donate to these blood types</p>
+                    </div>
+                  </div>
+                  <div className="bg-tags-row">
+                    {card.give.map((g, i) => (
+                      <span key={i} className="bg-tag bg-tag-give">{g}</span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Can Receive From */}
+                <div className="bg-compat-section bg-receive-section">
+                  <div className="bg-compat-header">
+                    <ReceiveIcon />
+                    <div>
+                      <p className="bg-compat-label">Can Receive From:</p>
+                      <p className="bg-compat-sub">You can receive from these blood types</p>
+                    </div>
+                  </div>
+                  <div className="bg-tags-row">
+                    {card.receive.map((r, i) => (
+                      <span key={i} className="bg-tag bg-tag-receive">{r}</span>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              <div>
-                <small className="text-gray-500 font-bold block text-xs uppercase mb-1.5">
-                  <i className="fa-solid fa-syringe text-blue-600 mr-1"></i> CAN RECEIVE FROM:
-                </small>
-                <div className="flex flex-wrap gap-1">
-                  {card.receive.map((r, i) => (
-                    <span key={i} className="compat-tag compat-receive">
-                      {r}
-                    </span>
-                  ))}
-                </div>
-              </div>
+              {/* ── Card Wave Footer ── */}
+              <CardWave />
             </div>
           ))}
         </div>
