@@ -3,19 +3,39 @@ const API_BASE_URL = rawApiUrl.replace(/\/+$/, '').endsWith('/api')
   ? rawApiUrl.replace(/\/+$/, '')
   : `${rawApiUrl.replace(/\/+$/, '')}/api`;
 
+export const getAuthToken = () => localStorage.getItem('lifedrop_token');
+export const setAuthToken = (token) => {
+  if (token) {
+    localStorage.setItem('lifedrop_token', token);
+  } else {
+    localStorage.removeItem('lifedrop_token');
+  }
+};
+
 async function request(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
+  const token = getAuthToken();
+
   const config = {
+    ...options,
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options.headers,
     },
-    ...options,
   };
 
   try {
     const response = await fetch(url, config);
     const data = await response.json();
+
+    if (response.status === 401) {
+      // Clear token if invalid or expired
+      setAuthToken(null);
+      localStorage.removeItem('lifedrop_current_user');
+      window.dispatchEvent(new Event('lifedrop_auth_unauthorized'));
+    }
+
     if (!response.ok) {
       throw new Error(data.error || 'Server error occurred');
     }
@@ -50,6 +70,8 @@ export const authAPI = {
       body: JSON.stringify(data),
     }),
 
+  getMe: () => request('/auth/me'),
+
   updateHospitalProfile: (data) =>
     request('/auth/hospital/profile', {
       method: 'PUT',
@@ -78,12 +100,6 @@ export const authAPI = {
     request('/auth/forgot-password/reset', {
       method: 'POST',
       body: JSON.stringify({ email, role, otp, newPassword, confirmPassword }),
-    }),
-
-  resetPasswordWithPhone: ({ email, phone, role, newPassword, confirmPassword }) =>
-    request('/auth/forgot-password/reset-with-phone', {
-      method: 'POST',
-      body: JSON.stringify({ email, phone, role, newPassword, confirmPassword }),
     }),
 };
 
@@ -160,4 +176,3 @@ export const publicAPI = {
   getCommunityDonors: (bg) => request(`/public/community-donors${bg ? `?bg=${encodeURIComponent(bg)}` : ''}`),
   getStats: () => request('/public/stats'),
 };
-

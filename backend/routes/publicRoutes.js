@@ -6,12 +6,30 @@ import Receiver from '../models/Receiver.js';
 
 const router = express.Router();
 
+const VALID_BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+
+const maskEmail = (email) => {
+  if (!email || !email.includes('@')) return '';
+  const [user, domain] = email.split('@');
+  if (user.length <= 2) return `${user[0]}***@${domain}`;
+  return `${user.slice(0, 2)}***${user.slice(-1)}@${domain}`;
+};
+
+const maskPhone = (phone) => {
+  if (!phone) return '';
+  const clean = phone.replace(/\s+/g, '');
+  if (clean.length < 4) return '***';
+  return `${clean.slice(0, 4)}****${clean.slice(-3)}`;
+};
+
 // Public blood stock search
 router.get('/blood-stock', async (req, res) => {
   try {
-    const { bg, search } = req.query;
-    const filterGroup = bg || search;
-    const query = filterGroup ? { bg: filterGroup } : {};
+    const rawBg = typeof req.query.bg === 'string'
+      ? req.query.bg.trim()
+      : (typeof req.query.search === 'string' ? req.query.search.trim() : '');
+
+    const query = rawBg && VALID_BLOOD_GROUPS.includes(rawBg) ? { bg: rawBg } : {};
 
     const stock = await BloodInfo.find(query)
       .populate('hospital', 'hname hemail hphone hcity')
@@ -31,16 +49,18 @@ router.get('/blood-stock', async (req, res) => {
 
     res.json(formatted);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: 'Failed to search blood inventory.' });
   }
 });
 
-// Public voluntary community donors directory
+// Public voluntary community donors directory (with PII masking)
 router.get('/community-donors', async (req, res) => {
   try {
-    const { bg, search } = req.query;
-    const filterGroup = bg || search;
-    const query = filterGroup ? { bg: filterGroup } : {};
+    const rawBg = typeof req.query.bg === 'string'
+      ? req.query.bg.trim()
+      : (typeof req.query.search === 'string' ? req.query.search.trim() : '');
+
+    const query = rawBg && VALID_BLOOD_GROUPS.includes(rawBg) ? { bg: rawBg } : {};
 
     const donors = await BloodDInfo.find(query)
       .populate('receiver', 'rname remail rphone rcity rbg')
@@ -51,8 +71,8 @@ router.get('/community-donors', async (req, res) => {
       _id: item._id,
       rid: item.receiver?._id,
       rname: item.receiver?.rname || 'Community Donor',
-      remail: item.receiver?.remail || '',
-      rphone: item.receiver?.rphone || '',
+      remail: maskEmail(item.receiver?.remail || ''),
+      rphone: maskPhone(item.receiver?.rphone || ''),
       rcity: item.receiver?.rcity || 'Unknown',
       bg: item.bg,
       createdAt: item.createdAt,
@@ -60,7 +80,7 @@ router.get('/community-donors', async (req, res) => {
 
     res.json(formatted);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: 'Failed to retrieve donors directory.' });
   }
 });
 
@@ -77,9 +97,8 @@ router.get('/stats', async (req, res) => {
       stockUnits: stockCount,
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: 'Failed to retrieve system statistics.' });
   }
 });
 
 export default router;
-

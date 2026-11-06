@@ -15,6 +15,7 @@ export default function RegisterPage() {
   const [hphone, setHphone] = useState('');
   const [hemail, setHemail] = useState('');
   const [hpassword, setHpassword] = useState('');
+  const [showHPassword, setShowHPassword] = useState(false);
 
   // User fields
   const [rname, setRname] = useState('');
@@ -23,6 +24,7 @@ export default function RegisterPage() {
   const [rphone, setRphone] = useState('');
   const [remail, setRemail] = useState('');
   const [rpassword, setRpassword] = useState('');
+  const [showRPassword, setShowRPassword] = useState(false);
 
   useEffect(() => {
     if (currentUser?.role === 'hospital') {
@@ -154,20 +156,30 @@ export default function RegisterPage() {
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-1.5">
                     <i className="fa-solid fa-key text-red-600 mr-1"></i> Secure Password (min 6 characters)
                   </label>
-                  <input
-                    type="password"
-                    value={hpassword}
-                    onChange={(e) => setHpassword(e.target.value)}
-                    placeholder="••••••••"
-                    minLength={6}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100 transition text-sm"
-                    required
-                  />
+                  <div className="relative">
+                    <input
+                      type={showHPassword ? 'text' : 'password'}
+                      value={hpassword}
+                      onChange={(e) => setHpassword(e.target.value)}
+                      placeholder="••••••••"
+                      minLength={6}
+                      className="w-full px-4 py-2.5 pr-10 rounded-xl border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100 transition text-sm"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowHPassword(!showHPassword)}
+                      className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 cursor-pointer"
+                      title={showHPassword ? 'Hide password' : 'Show password'}
+                    >
+                      <i className={`fa-solid ${showHPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                    </button>
+                  </div>
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full mt-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-3 rounded-xl shadow-md transition flex items-center justify-center gap-2"
+                  className="w-full mt-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-3 rounded-xl shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <i className="fa-solid fa-check"></i> Register Hospital
                 </button>
@@ -257,20 +269,30 @@ export default function RegisterPage() {
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-1.5">
                     <i className="fa-solid fa-key text-red-600 mr-1"></i> Secure Password (min 6 characters)
                   </label>
-                  <input
-                    type="password"
-                    value={rpassword}
-                    onChange={(e) => setRpassword(e.target.value)}
-                    placeholder="••••••••"
-                    minLength={6}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100 transition text-sm"
-                    required
-                  />
+                  <div className="relative">
+                    <input
+                      type={showRPassword ? 'text' : 'password'}
+                      value={rpassword}
+                      onChange={(e) => setRpassword(e.target.value)}
+                      placeholder="••••••••"
+                      minLength={6}
+                      className="w-full px-4 py-2.5 pr-10 rounded-xl border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100 transition text-sm"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowRPassword(!showRPassword)}
+                      className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 cursor-pointer"
+                      title={showRPassword ? 'Hide password' : 'Show password'}
+                    >
+                      <i className={`fa-solid ${showRPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                    </button>
+                  </div>
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full mt-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-3 rounded-xl shadow-md transition flex items-center justify-center gap-2"
+                  className="w-full mt-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-3 rounded-xl shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <i className="fa-solid fa-check"></i> Register as Donor/User
                 </button>
@@ -290,4 +312,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-

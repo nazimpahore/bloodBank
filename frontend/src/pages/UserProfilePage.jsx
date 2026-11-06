@@ -10,11 +10,26 @@ export default function UserProfilePage() {
   const [rbg, setRbg] = useState(currentUser?.rbg || '');
   const [rcity, setRcity] = useState(currentUser?.rcity || '');
   const [rphone, setRphone] = useState(currentUser?.rphone || '');
-  const [rpassword, setRpassword] = useState(currentUser?.rpassword || '');
+  const [rpassword, setRpassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [localError, setLocalError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    updateReceiverProfile({ rname, rbg, rcity, rphone, rpassword });
+    setLocalError('');
+
+    if (rpassword && rpassword.length < 6) {
+      setLocalError('New password must be at least 6 characters long.');
+      return;
+    }
+
+    const payload = { rname, rbg, rcity, rphone };
+    if (rpassword) {
+      payload.rpassword = rpassword;
+    }
+
+    await updateReceiverProfile(payload);
+    setRpassword('');
   };
 
   return (
@@ -41,6 +56,21 @@ export default function UserProfilePage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <AlertMessage />
+
+        {localError && (
+          <div className="max-w-xl mx-auto mb-4 p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <i className="fa-solid fa-circle-exclamation text-red-600"></i>
+              <span>{localError}</span>
+            </div>
+            <button
+              onClick={() => setLocalError('')}
+              className="text-gray-400 hover:text-gray-600 cursor-pointer ml-2"
+            >
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        )}
 
         <div className="max-w-xl mx-auto">
           <div className="bg-white border border-gray-200 rounded-3xl shadow-sm overflow-hidden">
@@ -128,16 +158,27 @@ export default function UserProfilePage() {
 
               <div>
                 <label className="block text-xs font-bold text-gray-600 uppercase mb-1.5">
-                  <i className="fa-solid fa-key text-red-600 mr-1"></i> Password
+                  <i className="fa-solid fa-key text-red-600 mr-1"></i> Change Password (Optional)
                 </label>
-                <input
-                  type="password"
-                  value={rpassword}
-                  onChange={(e) => setRpassword(e.target.value)}
-                  required
-                  minLength={6}
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100 transition text-sm"
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={rpassword}
+                    onChange={(e) => setRpassword(e.target.value)}
+                    placeholder="Leave blank to keep current password"
+                    minLength={6}
+                    className="w-full px-4 py-2.5 pr-10 rounded-xl border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100 transition text-sm"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 cursor-pointer"
+                    title={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    <i className={`fa-solid ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                  </button>
+                </div>
+                <span className="text-[11px] text-gray-400">Only fill this if you want to update your password</span>
               </div>
 
               <button
@@ -153,4 +194,3 @@ export default function UserProfilePage() {
     </div>
   );
 }
-

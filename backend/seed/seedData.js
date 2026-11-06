@@ -1,4 +1,5 @@
 import { connectDB } from '../config/db.js';
+import bcrypt from 'bcryptjs';
 import Hospital from '../models/Hospital.js';
 import Receiver from '../models/Receiver.js';
 import BloodInfo from '../models/BloodInfo.js';
@@ -22,8 +23,8 @@ export const clearDatabase = async () => {
 };
 
 export const seedDatabase = async () => {
-  // Demo auto-seeding has been disabled per user request.
-  // New accounts and blood samples can be registered through the web UI.
+  // Demo auto-seeding is disabled by default.
+  // New accounts registered via UI or seed will automatically be hashed with bcrypt.
 };
 
 // If run standalone via `npm run seed` or `node seed/seedData.js`

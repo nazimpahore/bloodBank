@@ -12,10 +12,12 @@ export default function LoginPage() {
   // Hospital fields
   const [hemail, setHemail] = useState('');
   const [hpassword, setHpassword] = useState('');
+  const [showHPassword, setShowHPassword] = useState(false);
 
   // User fields
   const [remail, setRemail] = useState('');
   const [rpassword, setRpassword] = useState('');
+  const [showRPassword, setShowRPassword] = useState(false);
 
   useEffect(() => {
     if (currentUser?.role === 'hospital') {
@@ -112,19 +114,29 @@ export default function LoginPage() {
                       Forgot password?
                     </Link>
                   </div>
-                  <input
-                    type="password"
-                    value={hpassword}
-                    onChange={(e) => setHpassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100 transition text-sm"
-                    required
-                  />
+                  <div className="relative">
+                    <input
+                      type={showHPassword ? 'text' : 'password'}
+                      value={hpassword}
+                      onChange={(e) => setHpassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="w-full px-4 py-2.5 pr-10 rounded-xl border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100 transition text-sm"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowHPassword(!showHPassword)}
+                      className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 cursor-pointer"
+                      title={showHPassword ? 'Hide password' : 'Show password'}
+                    >
+                      <i className={`fa-solid ${showHPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                    </button>
+                  </div>
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full mt-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-3 rounded-xl shadow-md transition flex items-center justify-center gap-2"
+                  className="w-full mt-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-3 rounded-xl shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <i className="fa-solid fa-right-to-bracket"></i> Login as Hospital
                 </button>
@@ -157,19 +169,29 @@ export default function LoginPage() {
                       Forgot password?
                     </Link>
                   </div>
-                  <input
-                    type="password"
-                    value={rpassword}
-                    onChange={(e) => setRpassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100 transition text-sm"
-                    required
-                  />
+                  <div className="relative">
+                    <input
+                      type={showRPassword ? 'text' : 'password'}
+                      value={rpassword}
+                      onChange={(e) => setRpassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="w-full px-4 py-2.5 pr-10 rounded-xl border border-gray-200 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-100 transition text-sm"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowRPassword(!showRPassword)}
+                      className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 cursor-pointer"
+                      title={showRPassword ? 'Hide password' : 'Show password'}
+                    >
+                      <i className={`fa-solid ${showRPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                    </button>
+                  </div>
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full mt-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-3 rounded-xl shadow-md transition flex items-center justify-center gap-2"
+                  className="w-full mt-4 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-3 rounded-xl shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <i className="fa-solid fa-right-to-bracket"></i> Login as User / Donor
                 </button>
@@ -189,4 +211,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
