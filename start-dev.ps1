@@ -3,3 +3,4 @@ Write-Host " Starting LifeDrop Backend (Port 5000) & Frontend (Port 5173)..." -F
 Write-Host "====================================================" -ForegroundColor Cyan
 npm run dev
 
+
