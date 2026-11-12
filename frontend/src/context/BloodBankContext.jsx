@@ -206,7 +206,7 @@ export function BloodBankProvider({ children }) {
     const res = await receiverAPI.requestBlood(hid, currentId, bg);
     if (res.data?.request) {
       setPatientRequests(prev => [res.data.request, ...prev]);
-      notify('success', 'Blood request submitted successfully to hospital!');
+      notify('success', res.data.message || 'Blood request submitted successfully to hospital!');
       return true;
     }
 
@@ -249,7 +249,7 @@ export function BloodBankProvider({ children }) {
     const res = await hospitalAPI.requestDonor(currentId, rid, bg);
     if (res.data?.request) {
       setDonorRequests(prev => [res.data.request, ...prev]);
-      notify('success', 'Inquiry sent to voluntary community donor!');
+      notify('success', res.data.message || 'Inquiry sent to voluntary community donor!');
       return true;
     }
 

@@ -92,7 +92,22 @@ const buildBrandedLayout = ({ subtitle, bodyHtml, footerNote }) => `
   </div>
 `;
 
-const sendAcceptedNotificationEmail = async ({
+const NOTIFICATION_TONES = {
+  accepted: {
+    bg: '#ecfdf5',
+    border: '#a7f3d0',
+    title: '#065f46',
+    text: '#047857',
+  },
+  request: {
+    bg: '#fff7ed',
+    border: '#fed7aa',
+    title: '#9a3412',
+    text: '#c2410c',
+  },
+};
+
+const sendNotificationEmail = async ({
   toEmail,
   recipientName,
   subtitle,
@@ -102,9 +117,11 @@ const sendAcceptedNotificationEmail = async ({
   detailsTitle,
   details,
   instructions,
+  tone = 'accepted',
 }) => {
   const safeName = escapeHtml(recipientName || 'User');
   const safeHeadline = escapeHtml(headline);
+  const palette = NOTIFICATION_TONES[tone] || NOTIFICATION_TONES.accepted;
 
   const detailsRowsHtml = details
     .filter(([, value]) => value)
@@ -126,9 +143,9 @@ const sendAcceptedNotificationEmail = async ({
     <p style="font-size: 14px; line-height: 1.6; margin: 0 0 12px;">
       Hello <strong>${safeName}</strong>,
     </p>
-    <div style="background-color: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 10px; padding: 14px 16px; margin: 0 0 18px;">
-      <p style="margin: 0; font-size: 14px; font-weight: bold; color: #065f46;">${safeHeadline}</p>
-      <p style="margin: 6px 0 0; font-size: 13px; color: #047857; line-height: 1.5;">${escapeHtml(summaryText)}</p>
+    <div style="background-color: ${palette.bg}; border: 1px solid ${palette.border}; border-radius: 10px; padding: 14px 16px; margin: 0 0 18px;">
+      <p style="margin: 0; font-size: 14px; font-weight: bold; color: ${palette.title};">${safeHeadline}</p>
+      <p style="margin: 6px 0 0; font-size: 13px; color: ${palette.text}; line-height: 1.5;">${escapeHtml(summaryText)}</p>
     </div>
     <h3 style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: #374151; margin: 0 0 8px;">${escapeHtml(detailsTitle)}</h3>
     <table style="width: 100%; border-collapse: collapse; margin: 0 0 18px; background-color: #f9fafb; border-radius: 8px; overflow: hidden;">
@@ -237,7 +254,7 @@ export const sendBloodRequestAcceptedEmail = async ({
     'Coordinate directly with the blood bank staff on arrival regarding any hospital verification or replacement donor requirements.',
   ];
 
-  await sendAcceptedNotificationEmail({
+  await sendNotificationEmail({
     toEmail,
     recipientName: userName,
     subtitle: 'Blood Request Accepted',
@@ -254,6 +271,7 @@ export const sendBloodRequestAcceptedEmail = async ({
       ['Request ID', requestId ? String(requestId) : ''],
     ],
     instructions,
+    tone: 'accepted',
   });
 };
 
@@ -276,7 +294,7 @@ export const sendDonorInquiryAcceptedEmail = async ({
     'Advise the donor to stay hydrated, have a light meal before donating, and bring a valid Government Photo ID.',
   ];
 
-  await sendAcceptedNotificationEmail({
+  await sendNotificationEmail({
     toEmail,
     recipientName: hospitalName,
     subtitle: 'Donor Request Accepted',
@@ -293,5 +311,86 @@ export const sendDonorInquiryAcceptedEmail = async ({
       ['Inquiry ID', inquiryId ? String(inquiryId) : ''],
     ],
     instructions,
+    tone: 'accepted',
+  });
+};
+
+export const sendNewBloodRequestEmail = async ({
+  toEmail,
+  hospitalName,
+  bloodGroup,
+  requester,
+  requestId,
+}) => {
+  const requesterName = requester?.rname || 'A Patient / User';
+  const requesterCity = requester?.rcity || '';
+  const requesterPhone = requester?.rphone || '';
+  const requesterEmail = requester?.remail || '';
+
+  const instructions = [
+    'Log in to your LifeDrop Hospital Dashboard and open the Patient Requests section.',
+    `Check your blood inventory for ${bloodGroup} unit availability.`,
+    'Click Accept or Decline on the request so the user receives an automatic email update.',
+    `For urgent coordination, contact the requester directly${requesterPhone ? ` at ${requesterPhone}` : ''}${requesterEmail ? ` (${requesterEmail})` : ''}.`,
+  ];
+
+  await sendNotificationEmail({
+    toEmail,
+    recipientName: hospitalName,
+    subtitle: 'New Blood Request Received',
+    subject: `New ${bloodGroup} Blood Request Received — ${requesterName}`,
+    headline: `New Blood Request: ${bloodGroup} Blood Unit`,
+    summaryText: `${requesterName} has sent a blood request for blood group ${bloodGroup} to ${hospitalName || 'your hospital'}. Please review and respond as soon as possible.`,
+    detailsTitle: 'Requester Contact & Request Details',
+    details: [
+      ['Requester Name', requesterName],
+      ['Blood Group Needed', bloodGroup],
+      ['City', requesterCity],
+      ['Phone', requesterPhone],
+      ['Email', requesterEmail],
+      ['Request ID', requestId ? String(requestId) : ''],
+    ],
+    instructions,
+    tone: 'request',
+  });
+};
+
+export const sendNewDonorInquiryEmail = async ({
+  toEmail,
+  donorName,
+  bloodGroup,
+  hospital,
+  inquiryId,
+}) => {
+  const hospitalName = hospital?.hname || 'A Partner Hospital';
+  const hospitalCity = hospital?.hcity || '';
+  const hospitalPhone = hospital?.hphone || '';
+  const hospitalEmail = hospital?.hemail || '';
+
+  const instructions = [
+    'Log in to your LifeDrop User / Donor Dashboard and open your Donation Inquiries list.',
+    `Check if you are eligible and available to donate ${bloodGroup} blood.`,
+    'Click Accept if you can donate (the hospital will receive an email with your contact details), or Decline if you are currently unavailable.',
+    `To coordinate directly, contact ${hospitalName}${hospitalPhone ? ` at ${hospitalPhone}` : ''}${hospitalEmail ? ` (${hospitalEmail})` : ''}.`,
+  ];
+
+  await sendNotificationEmail({
+    toEmail,
+    recipientName: donorName,
+    subtitle: 'Blood Donation Request',
+    subject: `Urgent ${bloodGroup} Blood Donation Request from ${hospitalName}`,
+    headline: `Blood Donation Request: ${bloodGroup}`,
+    summaryText: `${hospitalName} has requested ${bloodGroup} blood from you through the LifeDrop Voluntary Donor directory. Your response can help save a life.`,
+    detailsTitle: 'Hospital Contact & Inquiry Details',
+    details: [
+      ['Hospital Name', hospitalName],
+      ['Blood Group Needed', bloodGroup],
+      ['City', hospitalCity],
+      ['Phone', hospitalPhone],
+      ['Email', hospitalEmail],
+      ['Inquiry ID', inquiryId ? String(inquiryId) : ''],
+    ],
+    instructions,
+    tone: 'request',
   });
 };

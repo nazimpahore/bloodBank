@@ -3,7 +3,10 @@ import BloodInfo from '../models/BloodInfo.js';
 import BloodRequest from '../models/BloodRequest.js';
 import BloodDonate from '../models/BloodDonate.js';
 import { verifyToken } from '../middleware/authMiddleware.js';
-import { sendBloodRequestAcceptedEmail } from '../utils/emailService.js';
+import {
+  sendBloodRequestAcceptedEmail,
+  sendNewDonorInquiryEmail,
+} from '../utils/emailService.js';
 
 const router = express.Router();
 
@@ -247,7 +250,34 @@ router.post('/donor-requests', async (req, res) => {
       bg,
       status: 'Pending',
     });
-    res.status(201).json({ message: 'Inquiry sent to voluntary community donor!', request: created });
+
+    let emailSent = false;
+    const populated = await BloodDonate.findById(created._id)
+      .populate('hospital', 'hname hemail hphone hcity')
+      .populate('receiver', 'rname remail rphone rcity');
+
+    if (populated?.receiver?.remail) {
+      try {
+        await sendNewDonorInquiryEmail({
+          toEmail: populated.receiver.remail,
+          donorName: populated.receiver.rname,
+          bloodGroup: populated.bg,
+          hospital: populated.hospital,
+          inquiryId: populated._id,
+        });
+        emailSent = true;
+      } catch (emailErr) {
+        console.error('[NEW DONOR INQUIRY EMAIL ERROR]:', emailErr.message);
+      }
+    }
+
+    res.status(201).json({
+      message: emailSent
+        ? 'Inquiry sent to voluntary community donor with email notification!'
+        : 'Inquiry sent to voluntary community donor!',
+      emailSent,
+      request: created,
+    });
   } catch (err) {
     res.status(500).json({ error: 'Failed to create donor inquiry.' });
   }

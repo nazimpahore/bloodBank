@@ -3,7 +3,10 @@ import BloodDInfo from '../models/BloodDInfo.js';
 import BloodRequest from '../models/BloodRequest.js';
 import BloodDonate from '../models/BloodDonate.js';
 import { verifyToken } from '../middleware/authMiddleware.js';
-import { sendDonorInquiryAcceptedEmail } from '../utils/emailService.js';
+import {
+  sendDonorInquiryAcceptedEmail,
+  sendNewBloodRequestEmail,
+} from '../utils/emailService.js';
 
 const router = express.Router();
 
@@ -142,7 +145,34 @@ router.post('/requests', async (req, res) => {
       bg,
       status: 'Pending',
     });
-    res.status(201).json({ message: 'Blood request submitted successfully to hospital!', request: created });
+
+    let emailSent = false;
+    const populated = await BloodRequest.findById(created._id)
+      .populate('hospital', 'hname hemail hphone hcity')
+      .populate('receiver', 'rname remail rphone rcity');
+
+    if (populated?.hospital?.hemail) {
+      try {
+        await sendNewBloodRequestEmail({
+          toEmail: populated.hospital.hemail,
+          hospitalName: populated.hospital.hname,
+          bloodGroup: populated.bg,
+          requester: populated.receiver,
+          requestId: populated._id,
+        });
+        emailSent = true;
+      } catch (emailErr) {
+        console.error('[NEW BLOOD REQUEST EMAIL ERROR]:', emailErr.message);
+      }
+    }
+
+    res.status(201).json({
+      message: emailSent
+        ? 'Blood request submitted and email notification sent to hospital!'
+        : 'Blood request submitted successfully to hospital!',
+      emailSent,
+      request: created,
+    });
   } catch (err) {
     res.status(500).json({ error: 'Failed to submit blood request.' });
   }
