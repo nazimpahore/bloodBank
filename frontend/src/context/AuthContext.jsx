@@ -147,10 +147,11 @@ export function AuthProvider({ children }) {
 
     const { data, error } = await authAPI.requestPasswordReset({ email: cleanEmail, role });
     if (data) {
-      setAuthSuccess(data.message || 'Verification code sent to your registered contact.');
+      setAuthSuccess(data.message || 'Verification code sent to your registered email.');
       return {
         success: true,
         message: data.message,
+        expiresInMinutes: data.expiresInMinutes,
         phoneHint: data.phoneHint,
       };
     }

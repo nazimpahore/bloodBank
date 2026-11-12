@@ -6,6 +6,7 @@ import Receiver from '../models/Receiver.js';
 import PasswordReset from '../models/PasswordReset.js';
 import { verifyToken } from '../middleware/authMiddleware.js';
 import { authLimiter, otpLimiter } from '../middleware/rateLimitMiddleware.js';
+import { OTP_EXPIRY_MINUTES, sendPasswordResetOtpEmail } from '../utils/emailService.js';
 import {
   validateRequest,
   hospitalRegisterSchema,
@@ -361,10 +362,18 @@ router.post('/forgot-password/request', otpLimiter, async (req, res) => {
       return res.status(400).json({ error: 'Invalid account role specified.' });
     }
 
-    // Cryptographically secure 6-digit numeric OTP
+    // Cryptographically secure 6-digit numeric OTP (valid for 5 minutes)
     const rawOtp = crypto.randomInt(100000, 1000000).toString();
     const hashedOtp = crypto.createHash('sha256').update(rawOtp).digest('hex');
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // Valid for 15 minutes
+    const expiresAt = new Date(Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000);
+
+    await sendPasswordResetOtpEmail({
+      toEmail: cleanEmail,
+      recipientName: accountName,
+      role,
+      otp: rawOtp,
+      expiresInMinutes: OTP_EXPIRY_MINUTES,
+    });
 
     await PasswordReset.findOneAndUpdate(
       { email: cleanEmail, role },
@@ -372,19 +381,19 @@ router.post('/forgot-password/request', otpLimiter, async (req, res) => {
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
 
-    // Terminal log for dev/testing without exposing in HTTP payload
-    console.log('\n=============================================');
-    console.log(`[DEV OTP]: Verification code for ${cleanEmail} (${role}): ${rawOtp}`);
-    console.log('=============================================\n');
-
     res.json({
-      message: `A verification code has been generated for ${accountName}.`,
+      message: `A verification code has been sent to ${cleanEmail}. It is valid for ${OTP_EXPIRY_MINUTES} minutes.`,
       email: cleanEmail,
       role,
+      expiresInMinutes: OTP_EXPIRY_MINUTES,
       phoneHint: phone ? `***-***-${phone.slice(-4)}` : null,
     });
   } catch (err) {
-    res.status(500).json({ error: 'Failed to request password reset code.' });
+    console.error('[FORGOT PASSWORD ERROR]:', err.message);
+    if (err.status === 503) {
+      return res.status(503).json({ error: err.message });
+    }
+    res.status(500).json({ error: 'Failed to send password reset verification code.' });
   }
 });
 

@@ -33,8 +33,23 @@ export default function ForgotPasswordPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [phoneHint, setPhoneHint] = useState('');
+  const [secondsLeft, setSecondsLeft] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [localError, setLocalError] = useState('');
+
+  useEffect(() => {
+    if (step !== 2 || secondsLeft <= 0) return;
+    const timer = setInterval(() => {
+      setSecondsLeft((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [step, secondsLeft]);
+
+  const formatCountdown = (totalSeconds) => {
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  };
 
   useEffect(() => {
     if (currentUser?.role === 'hospital') {
@@ -53,6 +68,7 @@ export default function ForgotPasswordPage() {
     setActiveTab(role);
     setStep(1);
     setOtp('');
+    setSecondsLeft(0);
     setLocalError('');
   };
 
@@ -71,6 +87,7 @@ export default function ForgotPasswordPage() {
 
     if (result.success) {
       setPhoneHint(result.phoneHint || '');
+      setSecondsLeft((result.expiresInMinutes || 5) * 60);
       setStep(2);
     } else {
       setLocalError(result.error || 'Failed to request password reset code.');
@@ -230,7 +247,7 @@ export default function ForgotPasswordPage() {
                     required
                   />
                   <p className="mt-1 text-xs text-gray-500">
-                    A secure one-time verification code will be generated for your {activeTab === 'hospital' ? 'hospital' : 'user'} account.
+                    A 6-digit verification code (valid for 5 minutes) will be sent to your registered {activeTab === 'hospital' ? 'hospital' : 'user'} email address.
                   </p>
                 </div>
 
@@ -256,16 +273,27 @@ export default function ForgotPasswordPage() {
             {step === 2 && (
               <form onSubmit={handleVerifyOtp} className="space-y-4">
                 <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl text-xs text-blue-900">
-                  <div className="flex items-center gap-2 font-bold mb-1">
-                    <i className="fa-solid fa-shield-halved text-blue-600"></i>
-                    <span>Code Dispatched Securely</span>
+                  <div className="flex items-center justify-between gap-2 font-bold mb-1">
+                    <div className="flex items-center gap-2">
+                      <i className="fa-solid fa-envelope-circle-check text-blue-600"></i>
+                      <span>Verification Code Sent</span>
+                    </div>
+                    <span
+                      className={`font-mono text-xs px-2 py-0.5 rounded-md ${
+                        secondsLeft > 0 ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-700'
+                      }`}
+                    >
+                      {secondsLeft > 0 ? formatCountdown(secondsLeft) : 'Expired'}
+                    </span>
                   </div>
                   <p className="text-blue-800 text-xs">
-                    A 6-digit verification code has been issued for <strong>{email}</strong>
+                    A 6-digit verification code has been sent to <strong>{email}</strong>
                     {phoneHint ? ` (${phoneHint})` : ''}.
                   </p>
-                  <p className="text-[11px] text-blue-600 mt-1 italic">
-                    (In local development mode, check your backend server terminal to view the code)
+                  <p className="text-[11px] text-blue-700 mt-1">
+                    {secondsLeft > 0
+                      ? 'This code is valid for 5 minutes. Please check your inbox (and spam/junk folder).'
+                      : 'This code has expired. Click Resend below to receive a new code.'}
                   </p>
                 </div>
 
