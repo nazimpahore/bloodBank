@@ -3,6 +3,7 @@ import BloodDInfo from '../models/BloodDInfo.js';
 import BloodRequest from '../models/BloodRequest.js';
 import BloodDonate from '../models/BloodDonate.js';
 import { verifyToken } from '../middleware/authMiddleware.js';
+import { sendDonorInquiryAcceptedEmail } from '../utils/emailService.js';
 
 const router = express.Router();
 
@@ -211,10 +212,40 @@ router.put('/inquiries/:donoid/accept', async (req, res) => {
       return res.status(403).json({ error: 'Unauthorized to respond to another user’s inquiry.' });
     }
 
+    const wasAlreadyAccepted = inquiry.status === 'Accepted';
     inquiry.status = 'Accepted';
     await inquiry.save();
 
-    res.json({ message: 'You have agreed to donate blood for this request! Thank you.', request: inquiry });
+    let emailSent = false;
+    if (!wasAlreadyAccepted) {
+      await inquiry.populate([
+        { path: 'hospital', select: 'hname hemail hphone hcity' },
+        { path: 'receiver', select: 'rname remail rphone rcity' },
+      ]);
+
+      if (inquiry.hospital?.hemail) {
+        try {
+          await sendDonorInquiryAcceptedEmail({
+            toEmail: inquiry.hospital.hemail,
+            hospitalName: inquiry.hospital.hname,
+            bloodGroup: inquiry.bg,
+            donor: inquiry.receiver,
+            inquiryId: inquiry._id,
+          });
+          emailSent = true;
+        } catch (emailErr) {
+          console.error('[INQUIRY ACCEPT EMAIL ERROR]:', emailErr.message);
+        }
+      }
+    }
+
+    res.json({
+      message: emailSent
+        ? 'You have agreed to donate blood! Notification email sent to the hospital.'
+        : 'You have agreed to donate blood for this request! Thank you.',
+      emailSent,
+      request: inquiry,
+    });
   } catch (err) {
     res.status(500).json({ error: 'Failed to accept inquiry.' });
   }

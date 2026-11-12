@@ -3,6 +3,7 @@ import BloodInfo from '../models/BloodInfo.js';
 import BloodRequest from '../models/BloodRequest.js';
 import BloodDonate from '../models/BloodDonate.js';
 import { verifyToken } from '../middleware/authMiddleware.js';
+import { sendBloodRequestAcceptedEmail } from '../utils/emailService.js';
 
 const router = express.Router();
 
@@ -127,10 +128,40 @@ router.put('/requests/:reqid/accept', async (req, res) => {
       return res.status(403).json({ error: 'Unauthorized to accept requests for another hospital.' });
     }
 
+    const wasAlreadyAccepted = request.status === 'Accepted';
     request.status = 'Accepted';
     await request.save();
 
-    res.json({ message: 'Request accepted!', request });
+    let emailSent = false;
+    if (!wasAlreadyAccepted) {
+      await request.populate([
+        { path: 'hospital', select: 'hname hemail hphone hcity' },
+        { path: 'receiver', select: 'rname remail rphone rcity' },
+      ]);
+
+      if (request.receiver?.remail) {
+        try {
+          await sendBloodRequestAcceptedEmail({
+            toEmail: request.receiver.remail,
+            userName: request.receiver.rname,
+            bloodGroup: request.bg,
+            hospital: request.hospital,
+            requestId: request._id,
+          });
+          emailSent = true;
+        } catch (emailErr) {
+          console.error('[REQUEST ACCEPT EMAIL ERROR]:', emailErr.message);
+        }
+      }
+    }
+
+    res.json({
+      message: emailSent
+        ? 'Request accepted! Confirmation email sent to the user.'
+        : 'Request accepted!',
+      emailSent,
+      request,
+    });
   } catch (err) {
     res.status(500).json({ error: 'Failed to accept blood request.' });
   }

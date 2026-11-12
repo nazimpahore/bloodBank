@@ -217,9 +217,13 @@ export function BloodBankProvider({ children }) {
   };
 
   const acceptPatientRequest = async (reqid) => {
-    await hospitalAPI.acceptRequest(reqid);
+    const res = await hospitalAPI.acceptRequest(reqid);
+    if (res.error) {
+      notify('danger', res.error);
+      return;
+    }
     setPatientRequests(prev => prev.map(r => (r.reqid === reqid || r._id === reqid) ? { ...r, status: 'Accepted' } : r));
-    notify('success', 'Request accepted! Patient has been notified.');
+    notify('success', res.data?.message || 'Request accepted! Patient has been notified.');
   };
 
   const rejectPatientRequest = async (reqid) => {
@@ -256,9 +260,13 @@ export function BloodBankProvider({ children }) {
   };
 
   const acceptDonorInquiry = async (donoid) => {
-    await receiverAPI.acceptInquiry(donoid);
+    const res = await receiverAPI.acceptInquiry(donoid);
+    if (res.error) {
+      notify('danger', res.error);
+      return;
+    }
     setDonorRequests(prev => prev.map(r => (r.donoid === donoid || r._id === donoid) ? { ...r, status: 'Accepted' } : r));
-    notify('success', 'You have agreed to donate blood for this request! Thank you.');
+    notify('success', res.data?.message || 'You have agreed to donate blood for this request! Thank you.');
   };
 
   const rejectDonorInquiry = async (donoid) => {
