@@ -31,10 +31,15 @@ const getSmtpConfig = () => {
   const host = (readVar('SMTP_HOST') || 'smtp.gmail.com').trim();
   const port = Number(readVar('SMTP_PORT') || 587);
   const secureEnv = readVar('SMTP_SECURE');
+  // Prevent TLS/STARTTLS mismatch hangs on standard SMTP ports (465 = SSL, 587 = STARTTLS)
   const secure =
-    secureEnv !== ''
-      ? secureEnv === 'true'
-      : port === 465;
+    port === 465
+      ? true
+      : port === 587
+        ? false
+        : secureEnv !== ''
+          ? secureEnv === 'true'
+          : false;
   const from = (readVar('EMAIL_FROM') || readVar('SMTP_FROM') || (user ? `LifeDrop Blood Bank <${user}>` : '')).trim();
 
   return { host, port, secure, user, pass, from };
@@ -61,6 +66,9 @@ const getTransporter = () => {
       port,
       secure,
       auth: { user, pass },
+      connectionTimeout: 6000,
+      greetingTimeout: 6000,
+      socketTimeout: 8000,
     });
     cachedKey = key;
   }

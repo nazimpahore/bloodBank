@@ -27,7 +27,18 @@ async function request(endpoint, options = {}) {
 
   try {
     const response = await fetch(url, config);
-    const data = await response.json();
+    const rawText = await response.text();
+    let data = {};
+
+    if (rawText) {
+      try {
+        data = JSON.parse(rawText);
+      } catch {
+        data = { error: `Server returned an unexpected response (HTTP ${response.status}).` };
+      }
+    } else if (!response.ok) {
+      data = { error: `Server returned an empty response (HTTP ${response.status}).` };
+    }
 
     if (response.status === 401) {
       // Clear token if invalid or expired
@@ -37,7 +48,7 @@ async function request(endpoint, options = {}) {
     }
 
     if (!response.ok) {
-      throw new Error(data.error || 'Server error occurred');
+      throw new Error(data.error || `Server error occurred (HTTP ${response.status})`);
     }
     return { data, error: null };
   } catch (err) {

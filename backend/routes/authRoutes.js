@@ -389,9 +389,19 @@ router.post('/forgot-password/request', otpLimiter, async (req, res) => {
       phoneHint: phone ? `***-***-${phone.slice(-4)}` : null,
     });
   } catch (err) {
-    console.error('[FORGOT PASSWORD ERROR]:', err.message);
+    console.error('[FORGOT PASSWORD ERROR]:', err.code || err.message);
     if (err.status === 503) {
       return res.status(503).json({ error: err.message });
+    }
+    if (err.code === 'EAUTH' || err.responseCode === 535) {
+      return res.status(502).json({
+        error: 'Email authentication failed. Verify SMTP_USER and SMTP_PASS (App Password) on the server.',
+      });
+    }
+    if (err.code === 'ETIMEDOUT' || err.code === 'ESOCKET' || err.code === 'ECONNECTION') {
+      return res.status(504).json({
+        error: 'Email server connection timed out. Check SMTP_HOST and SMTP_PORT settings.',
+      });
     }
     res.status(500).json({ error: 'Failed to send password reset verification code.' });
   }
