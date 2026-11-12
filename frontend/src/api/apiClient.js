@@ -1,7 +1,10 @@
-const rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-const API_BASE_URL = rawApiUrl.replace(/\/+$/, '').endsWith('/api')
-  ? rawApiUrl.replace(/\/+$/, '')
-  : `${rawApiUrl.replace(/\/+$/, '')}/api`;
+const rawApiUrl = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').trim();
+const normalizedApiUrl =
+  rawApiUrl && !/^https?:\/\//i.test(rawApiUrl) && !rawApiUrl.startsWith('/')
+    ? `https://${rawApiUrl}`
+    : rawApiUrl;
+const trimmedApiUrl = normalizedApiUrl.replace(/\/+$/, '');
+const API_BASE_URL = trimmedApiUrl.endsWith('/api') ? trimmedApiUrl : `${trimmedApiUrl}/api`;
 
 export const getAuthToken = () => localStorage.getItem('lifedrop_token');
 export const setAuthToken = (token) => {

@@ -27,7 +27,7 @@ const getSmtpConfig = () => {
   const readVar = (key) => fileEnv[key] || process.env[key] || '';
 
   const user = (readVar('SMTP_USER') || readVar('EMAIL_USER')).trim();
-  const pass = readVar('SMTP_PASS') || readVar('EMAIL_PASS');
+  const pass = (readVar('SMTP_PASS') || readVar('EMAIL_PASS')).trim();
   const host = (readVar('SMTP_HOST') || 'smtp.gmail.com').trim();
   const port = Number(readVar('SMTP_PORT') || 587);
   const secureEnv = readVar('SMTP_SECURE');
