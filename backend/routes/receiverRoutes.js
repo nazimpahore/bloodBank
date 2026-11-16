@@ -158,7 +158,6 @@ router.post('/requests', async (req, res) => {
           hospitalName: populated.hospital.hname,
           bloodGroup: populated.bg,
           requester: populated.receiver,
-          requestId: populated._id,
         });
         emailSent = true;
       } catch (emailErr) {
@@ -260,7 +259,6 @@ router.put('/inquiries/:donoid/accept', async (req, res) => {
             hospitalName: inquiry.hospital.hname,
             bloodGroup: inquiry.bg,
             donor: inquiry.receiver,
-            inquiryId: inquiry._id,
           });
           emailSent = true;
         } catch (emailErr) {

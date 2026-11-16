@@ -248,7 +248,6 @@ export const sendBloodRequestAcceptedEmail = async ({
   userName,
   bloodGroup,
   hospital,
-  requestId,
 }) => {
   const hospitalName = hospital?.hname || 'Partner Hospital';
   const hospitalCity = hospital?.hcity || '';
@@ -276,7 +275,6 @@ export const sendBloodRequestAcceptedEmail = async ({
       ['Phone', hospitalPhone],
       ['Email', hospitalEmail],
       ['Blood Group', bloodGroup],
-      ['Request ID', requestId ? String(requestId) : ''],
     ],
     instructions,
     tone: 'accepted',
@@ -288,7 +286,6 @@ export const sendDonorInquiryAcceptedEmail = async ({
   hospitalName,
   bloodGroup,
   donor,
-  inquiryId,
 }) => {
   const donorName = donor?.rname || 'Voluntary Donor';
   const donorCity = donor?.rcity || '';
@@ -316,7 +313,6 @@ export const sendDonorInquiryAcceptedEmail = async ({
       ['City', donorCity],
       ['Phone', donorPhone],
       ['Email', donorEmail],
-      ['Inquiry ID', inquiryId ? String(inquiryId) : ''],
     ],
     instructions,
     tone: 'accepted',
@@ -328,7 +324,6 @@ export const sendNewBloodRequestEmail = async ({
   hospitalName,
   bloodGroup,
   requester,
-  requestId,
 }) => {
   const requesterName = requester?.rname || 'A Patient / User';
   const requesterCity = requester?.rcity || '';
@@ -356,7 +351,6 @@ export const sendNewBloodRequestEmail = async ({
       ['City', requesterCity],
       ['Phone', requesterPhone],
       ['Email', requesterEmail],
-      ['Request ID', requestId ? String(requestId) : ''],
     ],
     instructions,
     tone: 'request',
@@ -368,7 +362,6 @@ export const sendNewDonorInquiryEmail = async ({
   donorName,
   bloodGroup,
   hospital,
-  inquiryId,
 }) => {
   const hospitalName = hospital?.hname || 'A Partner Hospital';
   const hospitalCity = hospital?.hcity || '';
@@ -396,7 +389,6 @@ export const sendNewDonorInquiryEmail = async ({
       ['City', hospitalCity],
       ['Phone', hospitalPhone],
       ['Email', hospitalEmail],
-      ['Inquiry ID', inquiryId ? String(inquiryId) : ''],
     ],
     instructions,
     tone: 'request',
